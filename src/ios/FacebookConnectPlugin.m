@@ -180,6 +180,12 @@
         if (self.loginManager == nil) {
             self.loginManager = [[FBSDKLoginManager alloc] init];
         }
+        
+        // Let's logout first. Because if the user tries to logout and then login with different permissions
+        // FB will return 304 error.
+        // Ref. http://stackoverflow.com/questions/29408299/ios-facebook-sdk-4-0-login-error-code-304
+        [login logOut];
+        
         [self.loginManager logInWithReadPermissions:permissions fromViewController:self.viewController handler:loginHandler];
         return;
     }
