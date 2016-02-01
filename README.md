@@ -120,13 +120,10 @@ Send Dialog:
 	
 Share dialog - post Open Graph Story:
 
-* "appnamespace" is the namespace of your facebook app (it can be found on the Settings page). It is needed only when you have a custom action/object.
-
 	{
-	
 		var obj = {};
 	
-    	obj['og:type'] = 'appnamespace:objectname';
+    	obj['og:type'] = 'objectname';
     	obj['og:title'] = 'Some title';
     	obj['og:url'] = 'https://en.wikipedia.org/wiki/Main_Page';
     	obj['og:description'] = 'Some description.';
@@ -137,11 +134,14 @@ Share dialog - post Open Graph Story:
     	
     	var options = {
     		method: 'share_open_graph', // Required
-        	action: 'appnamespace:action', // Required
+        	action: 'actionname', // Required
         	action_properties: JSON.stringify(ap), // Optional
         	object: JSON.stringify(obj) // Required
     	};
 	}
+	
+In case you want to use custom actions/objects, just prepend the app namespace to the name (E.g: ` obj['og:type'] = 'appnamespace:objectname' `, `action: 'appnamespace:actionname'`. The namespace of a Facebook app is found on the Settings page. 
+
 
 For options information see: [Facebook share dialog documentation](https://developers.facebook.com/docs/sharing/reference/share-dialog) [Facebook send dialog documentation](https://developers.facebook.com/docs/sharing/reference/send-dialog)
 
