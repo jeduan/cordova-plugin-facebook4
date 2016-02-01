@@ -117,6 +117,31 @@ Send Dialog:
 		description: "The site I told you about",
 		picture: "http://example.com/image.png"
 	}
+	
+Share dialog - post Open Graph Story:
+
+* "appnamespace" is the namespace of your facebook app (it can be found on the Settings page). It is needed only when you have a custom action/object.
+
+	{
+	
+		var obj = {};
+	
+    	obj['og:type'] = 'appnamespace:objectname';
+    	obj['og:title'] = 'Some title';
+    	obj['og:url'] = 'https://en.wikipedia.org/wiki/Main_Page';
+    	obj['og:description'] = 'Some description.';
+
+    	var ap = {};
+    	
+    	ap['expires_in'] = 3600;
+    	
+    	var options = {
+    		method: 'share_open_graph', // Required
+        	action: 'appnamespace:action', // Required
+        	action_properties: JSON.stringify(ap), // Optional
+        	object: JSON.stringify(obj) // Required
+    	};
+	}
 
 For options information see: [Facebook share dialog documentation](https://developers.facebook.com/docs/sharing/reference/share-dialog) [Facebook send dialog documentation](https://developers.facebook.com/docs/sharing/reference/send-dialog)
 
