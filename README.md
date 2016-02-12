@@ -7,7 +7,7 @@
 Make sure you've registered your Facebook app with Facebook and have an `APP_ID` [https://developers.facebook.com/apps](https://developers.facebook.com/apps).
 
 ```bash
-$ cordova plugin add cordova-plugin-facebook4 --save --variable APP_ID="123456789" --variable APP_NAME="myApplication"
+$ cordova plugin add https://github.com/jeduan/cordova-plugin-facebook4.git --save --variable APP_ID="123456789" --variable APP_NAME="myApplication"
 ```
 
 ## Usage
