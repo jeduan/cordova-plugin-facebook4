@@ -216,6 +216,32 @@ Example options:
 
 ## Sample Code
 
+**NOTE:**  All facebookConnectPlugin methods need to be called from within the facebookConnectPlugin.login sucessCallback like so :point_down:
+ 
+```js
+var fbLoginSuccess = function (userData) {
+  var userID = userData.authResponse.userID;
+  
+  facebookConnectPlugin.api(userID + "/?fields=email,first_name, last_name",
+    ['public_profile', 'email'],
+    function success(response) {
+      console.log( "User Info " + JSON.stringify(response))
+    },
+    function error(errorResponce) {
+   console.error(errorResponce)
+    }
+  )
+}
+
+
+facebookConnectPlugin.login(["public_profile"], fbLoginSuccess,
+  function loginError (error) {
+    console.error(error)
+  }
+);
+```
+### Invite
+
 ```js
 facebookConnectPlugin.appInvite(
     {
