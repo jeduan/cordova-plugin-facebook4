@@ -394,7 +394,8 @@ exports.defineManualTests = function (contentEl, createActionButton) {
             name:'Test Post',
             message:'First photo post',    
             caption: 'Testing using phonegap plugin',
-            description: 'Posting photo using phonegap facebook plugin'
+            description: 'Posting photo using phonegap facebook plugin',
+            quote: 'Testing quote using phonegap plugin'
         };
         
         function  onSuccess (result) {
