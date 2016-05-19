@@ -247,6 +247,7 @@
         content.contentTitle = [params objectForKey:@"caption"];
         content.imageURL = [NSURL URLWithString:[params objectForKey:@"picture"]];
         content.contentDescription = [params objectForKey:@"description"];
+        content.quote = [params objectForKey:@"quote"];
 
         self.dialogCallbackId = command.callbackId;
         [FBSDKMessageDialog showWithContent:content delegate:self];
@@ -259,6 +260,7 @@
         content.contentTitle = params[@"caption"];
         content.imageURL = [NSURL URLWithString:params[@"picture"]];
         content.contentDescription = params[@"description"];
+        content.quote = params[@"quote"];
 
         self.dialogCallbackId = command.callbackId;
         FBSDKShareDialog *dialog = [[FBSDKShareDialog alloc] init];
