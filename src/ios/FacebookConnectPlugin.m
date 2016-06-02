@@ -252,7 +252,23 @@
         [FBSDKMessageDialog showWithContent:content delegate:self];
         return;
 
-    } else if ([method isEqualToString:@"share"] || [method isEqualToString:@"share_open_graph"] || [method isEqualToString:@"feed"]) {
+    } else if([method isEqualToString:@"share_open_graph"]) {
+        NSLog(@"Popping up open graph dialog");
+        
+        NSDictionary *properties = options[@"object"];
+        FBSDKShareOpenGraphObject *object = [FBSDKShareOpenGraphObject objectWithProperties:properties];
+        FBSDKShareOpenGraphAction *action = [[FBSDKShareOpenGraphAction alloc] init];
+        action.actionType = options[@"action"];
+        [action setObject:object forKey:properties[@"og:type"]];
+        FBSDKShareOpenGraphContent *content = [[FBSDKShareOpenGraphContent alloc] init];
+        content.action = action;
+        content.previewPropertyName = properties[@"og:type"];
+        
+        self.dialogCallbackId = command.callbackId;
+        [FBSDKShareDialog showFromViewController:[self topMostController] withContent:content delegate:self];
+        
+        return;
+    } else if ([method isEqualToString:@"share"] || [method isEqualToString:@"feed"]) {
         // Create native params
         FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
         content.contentURL = [NSURL URLWithString:params[@"href"]];
