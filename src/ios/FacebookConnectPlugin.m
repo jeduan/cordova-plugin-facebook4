@@ -252,7 +252,7 @@
         [FBSDKMessageDialog showWithContent:content delegate:self];
         return;
 
-    } else if ([method isEqualToString:@"share"] || [method isEqualToString:@"share_open_graph"] || [method isEqualToString:@"feed"]) {
+    } else if ([method isEqualToString:@"share"] || [method isEqualToString:@"feed"]) {
         // Create native params
         FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
         content.contentURL = [NSURL URLWithString:params[@"href"]];
@@ -321,6 +321,41 @@
 
         self.gameRequestDialogCallbackId = command.callbackId;
         dialog.content = content;
+        [dialog show];
+        return;
+    } else if ([method isEqualToString:@"share_open_graph"]) {
+        
+        // Create an object
+        NSDictionary *properties =  params[@"object"];
+        FBSDKShareOpenGraphObject *object = [FBSDKShareOpenGraphObject objectWithProperties:properties];
+        
+        // Create an action
+        FBSDKShareOpenGraphAction *action = [[FBSDKShareOpenGraphAction alloc] init];
+        action.actionType = params[@"action"];
+        [action setObject:object forKey:params[@"objectName"]];
+        
+        // Create the content
+        FBSDKShareOpenGraphContent *content = [[FBSDKShareOpenGraphContent alloc] init];
+        content.action = action;
+        content.previewPropertyName = params[@"objectName"];
+        
+        FBSDKShareDialog *dialog = [[FBSDKShareDialog alloc] init];
+        dialog.fromViewController = self.viewController;
+        
+        
+        if (![dialog canShow]) {
+            CDVPluginResult *pluginResult;
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                             messageAsString:@"Cannot show dialog"];
+            return;
+        }
+        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"fbauth2://"]]){
+            dialog.mode = FBSDKShareDialogModeNative;
+        }
+        else {
+            dialog.mode = FBSDKShareDialogModeAutomatic; //or FBSDKShareDialogModeAutomatic
+        }
+        dialog.shareContent = content;
         [dialog show];
         return;
     }
