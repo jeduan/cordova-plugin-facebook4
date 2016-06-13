@@ -12,7 +12,6 @@
 #import <Bolts/BFCancellationToken.h>
 #import <Bolts/BFCancellationTokenRegistration.h>
 #import <Bolts/BFCancellationTokenSource.h>
-#import <Bolts/BFDefines.h>
 #import <Bolts/BFExecutor.h>
 #import <Bolts/BFTask.h>
 #import <Bolts/BFTaskCompletionSource.h>
@@ -29,8 +28,7 @@
 #import <Bolts/BFWebViewAppLinkResolver.h>
 #endif
 
-/*! @abstract 80175001: There were multiple errors. */
-extern NSInteger const kBFMultipleErrorsError;
+NS_ASSUME_NONNULL_BEGIN
 
 @interface Bolts : NSObject
 
@@ -41,3 +39,5 @@ extern NSInteger const kBFMultipleErrorsError;
 + (NSString *)version;
 
 @end
+
+NS_ASSUME_NONNULL_END
