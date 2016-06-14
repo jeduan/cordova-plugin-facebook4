@@ -1,14 +1,14 @@
 /* global FB */
 var isInited = false
-
-exports.getLoginStatus = function getLoginStatus (s, f) {
+var facebookConnectPlugin = {}
+facebookConnectPlugin.getLoginStatus = function getLoginStatus (s, f) {
   if (!assertInited()) return printError(f, new Error('init not called with valid version'))
   FB.getLoginStatus(function (response) {
     s(response)
   })
 }
 
-exports.showDialog = function showDialog (options, s, f) {
+facebookConnectPlugin.showDialog = function showDialog (options, s, f) {
   if (!assertInited()) return printError(f, new Error('init not called with valid version'))
 
   options.name = options.name || ''
@@ -27,7 +27,7 @@ exports.showDialog = function showDialog (options, s, f) {
   })
 }
 // Attach this to a UI element, this requires user interaction.
-exports.login = function login (permissions, s, f) {
+facebookConnectPlugin.login = function login (permissions, s, f) {
   if (!assertInited()) return printError(f, new Error('init not called with valid version'))
   // JS SDK takes an object here but the native SDKs use array.
   var options = {}
@@ -49,7 +49,7 @@ exports.login = function login (permissions, s, f) {
   }, options)
 }
 
-exports.getAccessToken = function getAccessToken (s, f) {
+facebookConnectPlugin.getAccessToken = function getAccessToken (s, f) {
   var response = FB.getAccessToken()
   if (response) {
     s(response)
@@ -58,29 +58,29 @@ exports.getAccessToken = function getAccessToken (s, f) {
   printError(f, new Error('NO_TOKEN'))
 }
 
-exports.logEvent = function logEvent (eventName, params, valueToSum, s, f) {
+facebookConnectPlugin.logEvent = function logEvent (eventName, params, valueToSum, s, f) {
   // AppEvents are not avaliable in JS.
   s()
 }
 
-exports.logPurchase = function (value, currency, s, f) {
+facebookConnectPlugin.logPurchase = function (value, currency, s, f) {
   // AppEvents are not avaliable in JS.
   s()
 }
 
-exports.appInvite = function (options, s, f) {
+facebookConnectPlugin.appInvite = function (options, s, f) {
   // App Invites are not avaliable in JS.
   s()
 }
 
-exports.logout = function (s, f) {
+facebookConnectPlugin.logout = function (s, f) {
   if (!assertInited()) return printError(f, new Error('init not called with valid version'))
   FB.logout(function (response) {
     s(response)
   })
 }
 
-exports.api = function (graphPath, permissions, s, f) {
+facebookConnectPlugin.api = function (graphPath, permissions, s, f) {
   if (!assertInited()) return printError(f, new Error('init not called with valid version'))
   // JS API does not take additional permissions
   FB.api(graphPath, function (response) {
@@ -93,7 +93,7 @@ exports.api = function (graphPath, permissions, s, f) {
 }
 
 // Browser wrapper API ONLY
-exports.browserInit = function (appId, version, s) {
+facebookConnectPlugin.browserInit = function (appId, version, s) {
   if (s == null && typeof version === 'function') {
     s = version
     version = null
