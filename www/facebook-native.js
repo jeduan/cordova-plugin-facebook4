@@ -37,10 +37,25 @@ exports.logout = function logout (s, f) {
   exec(s, f, 'FacebookConnectPlugin', 'logout', [])
 }
 
-exports.api = function api (graphPath, permissions, s, f) {
-  permissions = permissions || []
-  exec(s, f, 'FacebookConnectPlugin', 'graphApi', [graphPath, permissions])
-}
+exports.api = function api (graphPath, permissions) {
+  var httpMethod, params, s, f;
+
+  permissions = permissions || [];
+
+  if (arguments[2] === 'POST') {
+    httpMethod = arguments[2];
+    params = arguments[3];
+    s = arguments[4];
+    f = arguments[5];
+
+    exec(s, f, 'FacebookConnectPlugin', 'graphApi', [graphPath, permissions, httpMethod, params]);
+  } else {
+    s = arguments[2];
+    f = arguments[3];
+
+    exec(s, f, 'FacebookConnectPlugin', 'graphApi', [graphPath, permissions]);
+  }
+};
 
 exports.appInvite = function appLinks (options, s, f) {
   options = options || {}
