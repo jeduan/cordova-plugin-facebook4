@@ -149,7 +149,7 @@
     FBSDKLoginManagerRequestTokenHandler loginHandler = ^void(FBSDKLoginManagerLoginResult *result, NSError *error) {
         if (error) {
             // If the SDK has a message for the user, surface it.
-            NSString *errorMessage = error.userInfo[FBSDKErrorLocalizedDescriptionKey] ?: @"There was a problem logging you in.";
+            NSString *errorMessage = error.userInfo[FBSDKErrorDeveloperMessageKey] ?: @"There was a problem logging you in.";
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                               messageAsString:errorMessage];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -406,7 +406,7 @@
     FBSDKGraphRequestHandler graphHandler = ^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
         CDVPluginResult* pluginResult;
         if (error) {
-            NSString *message = error.userInfo[FBSDKErrorLocalizedDescriptionKey] ?: @"There was an error making the graph call.";
+            NSString *message = error.userInfo[FBSDKErrorDeveloperMessageKey] ?: @"There was an error making the graph call.";
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                              messageAsString:message];
         } else {
@@ -430,7 +430,7 @@
     [self loginWithPermissions:requestPermissions withHandler:^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         if (error) {
             // If the SDK has a message for the user, surface it.
-            NSString *errorMessage = error.userInfo[FBSDKErrorLocalizedDescriptionKey] ?: @"There was a problem logging you in.";
+            NSString *errorMessage = error.userInfo[FBSDKErrorDeveloperMessageKey] ?: @"There was a problem logging you in.";
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                               messageAsString:errorMessage];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -531,7 +531,7 @@
     if (publishPermissionFound && readPermissionFound) {
         // Mix of permissions, not allowed
         NSDictionary *userInfo = @{
-            FBSDKErrorLocalizedDescriptionKey: @"Cannot ask for both read and publish permissions.",
+            FBSDKErrorDeveloperMessageKey: @"Cannot ask for both read and publish permissions.",
         };
         NSError *error = [NSError errorWithDomain:@"facebook" code:-1 userInfo:userInfo];
         handler(nil, error);
@@ -772,7 +772,7 @@
     NSLog(@"error::%@", error);
 
     CDVPluginResult* pluginResult;
-    NSString *message = error.userInfo[FBSDKErrorLocalizedDescriptionKey] ?: @"There was an error making the graph call.";
+    NSString *message = error.userInfo[FBSDKErrorDeveloperMessageKey] ?: @"There was an error making the graph call.";
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                      messageAsString:message];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:self.gameRequestDialogCallbackId];
