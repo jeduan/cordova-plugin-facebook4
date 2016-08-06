@@ -292,7 +292,7 @@
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
                                                              options:NSJSONReadingMutableContainers
                                                                error:&jsonError];
-        
+
         if(jsonError) {
             NSLog(@"There was an error parsing your 'object' JSON string");
         } else {
@@ -306,7 +306,7 @@
             NSString *objectType = json[@"og:type"];
             objectType = [objectType stringByReplacingOccurrencesOfString:@"."
                                                                withString:@":"];
-            
+
             [action setObject:object forKey:objectType];
             FBSDKShareOpenGraphContent *content = [[FBSDKShareOpenGraphContent alloc] init];
             content.action = action;
@@ -380,6 +380,15 @@
     NSArray *permissionsNeeded = [command argumentAtIndex:1];
     NSSet *currentPermissions = [FBSDKAccessToken currentAccessToken].permissions;
 
+    // POST arguments (could be nil)
+    NSString *httpMethod = [command argumentAtIndex:2];
+    NSMutableDictionary *params = [command argumentAtIndex:3];
+
+    // HTTP method GET by default
+    if (httpMethod == nil) {
+        httpMethod = @"GET";
+    }
+
     // We will store here the missing permissions that we will have to request
     NSMutableArray *requestPermissions = [[NSMutableArray alloc] initWithArray:@[]];
     NSArray *permissions;
@@ -410,7 +419,7 @@
     };
 
     NSLog(@"Graph Path = %@", graphPath);
-    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:nil];
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:params HTTPMethod:httpMethod];
 
     // If we have permissions to request
     if ([permissions count] == 0){
@@ -588,7 +597,7 @@
     [pairs enumerateObjectsUsingBlock:
      ^(NSString *pair, NSUInteger idx, BOOL *stop) {
          NSArray *kv = [pair componentsSeparatedByString:@"="];
-         
+
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0
          NSString *key = [kv[0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
          NSString *val = [kv[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
