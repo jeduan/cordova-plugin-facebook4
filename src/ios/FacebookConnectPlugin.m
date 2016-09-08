@@ -459,6 +459,9 @@
     NSDictionary *options = [command.arguments objectAtIndex:0];
     NSString *url = options[@"url"];
     NSString *picture = options[@"picture"];
+    NSString *promotionText = options[@"promotionText"];
+    NSString *promotionCode = options[@"promotionCode"];
+    
     CDVPluginResult *result;
     self.dialogCallbackId = command.callbackId;
 
@@ -470,6 +473,13 @@
     if (picture) {
         content.appInvitePreviewImageURL = [NSURL URLWithString:picture];
     }
+
+    if (promotionText && promotionCode) {
+        content.promotionCode = promotionText;
+        content.promotionText = promotionCode;
+    }
+
+    
 
     FBSDKAppInviteDialog *dialog = [[FBSDKAppInviteDialog alloc] init];
     if ((url || picture) && [dialog canShow]) {

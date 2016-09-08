@@ -379,11 +379,34 @@ public class ConnectPlugin extends CordovaPlugin {
             }
         }
 
+        if (parameters.has("promotionText")) {
+            try {
+                promotionText = parameters.getString("promotionText");
+            } catch (JSONException e) {
+                Log.e(TAG, "Non-string 'promotionText' parameter provided to dialog");
+                callbackContext.error("Incorrect 'promotionText' parameter");
+                return;
+            }
+        }
+
+        if (parameters.has("promotionCode")) {
+            try {
+                promotionCode = parameters.getString("promotionCode");
+            } catch (JSONException e) {
+                Log.e(TAG, "Non-string 'promotionCode' parameter provided to dialog");
+                callbackContext.error("Incorrect 'promotionCode' parameter");
+                return;
+            }
+        }
+
         if (AppInviteDialog.canShow()) {
             AppInviteContent.Builder builder = new AppInviteContent.Builder();
             builder.setApplinkUrl(url);
             if (picture != null) {
                 builder.setPreviewImageUrl(picture);
+            }
+            if (promotionText != null && promotionCode != null) {
+                builder.setPromotionDetails(promotionText, promotionCode)
             }
 
             showDialogContext = callbackContext;
