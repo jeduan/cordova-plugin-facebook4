@@ -348,6 +348,9 @@ public class ConnectPlugin extends CordovaPlugin {
     private void executeAppInvite(JSONArray args, CallbackContext callbackContext) {
         String url = null;
         String picture = null;
+        String promotionCode = null;
+        String promotionText = null;
+        
         JSONObject parameters;
 
         try {
@@ -406,7 +409,7 @@ public class ConnectPlugin extends CordovaPlugin {
                 builder.setPreviewImageUrl(picture);
             }
             if (promotionText != null && promotionCode != null) {
-                builder.setPromotionDetails(promotionText, promotionCode)
+                builder.setPromotionDetails(promotionText, promotionCode);
             }
 
             showDialogContext = callbackContext;
