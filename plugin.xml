@@ -96,6 +96,21 @@
         <config-file target="*-Info.plist" parent="FacebookDisplayName">
             <string>$APP_NAME</string>
         </config-file>
+            
+        <config-file target="*-Info.plist" parent="FacebookUrlSchemeSuffix">
+            <string>stream</string>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+          <array>
+            <dict>
+              <key>CFBundleURLSchemes</key>
+              <array>
+                <string>fb$APP_IDstream</string>
+              </array>
+            </dict>
+          </array>
+        </config-file>
 
         <config-file target="*-Info.plist" parent="CFBundleURLTypes">
           <array>
