@@ -56,7 +56,7 @@ exports.activateApp = function (s, f) {
 }
 
 exports.userIsChild = function (child, s, f) {
-  exec(s, f, 'FacebookConnectPlugin', 'userNotAchild', [child])
+  exec(s, f, 'FacebookConnectPlugin', 'userIsChild', [child])
 }
 
 exports.getDeferredApplink = function (s, f) {
