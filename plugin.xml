@@ -61,6 +61,7 @@
         </config-file>
 
         <framework src="com.facebook.android:facebook-android-sdk:4.14.+"/>
+        <framework src="com.facebook.android:audience-network-sdk:4.14.+"/>
 
         <!-- cordova plugin src files -->
         <source-file src="src/android/ConnectPlugin.java" target-dir="src/org/apache/cordova/facebook" />
@@ -153,6 +154,7 @@
         <framework src="src/ios/FBSDKCoreKit.framework" custom="true" />
         <framework src="src/ios/FBSDKLoginKit.framework" custom="true" />
         <framework src="src/ios/FBSDKShareKit.framework" custom="true" />
+        <framework src="src/ios/FBAudienceNetwork.framework" custom="true" />
 
     </platform>
 

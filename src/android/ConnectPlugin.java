@@ -33,6 +33,7 @@ import com.facebook.share.widget.GameRequestDialog;
 import com.facebook.share.widget.MessageDialog;
 import com.facebook.share.widget.ShareDialog;
 import com.facebook.share.widget.AppInviteDialog;
+import com.facebook.ads.AdSettings;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -78,10 +79,15 @@ public class ConnectPlugin extends CordovaPlugin {
     private GameRequestDialog gameRequestDialog;
     private AppInviteDialog appInviteDialog;
     private MessageDialog messageDialog;
+    private Boolean isChild;
 
     @Override
     protected void pluginInitialize() {
         FacebookSdk.sdkInitialize(cordova.getActivity().getApplicationContext());
+
+        //Set user as a child until we know otherwise.
+        AdSettings.setIsChildDirected(true);
+        isChild = true;
 
         // create callbackManager
         callbackManager = CallbackManager.Factory.create();
@@ -345,8 +351,16 @@ public class ConnectPlugin extends CordovaPlugin {
             });
 
             return true;
+        } else if (action.equals("userIsChild")) {
+            executeUserIsChild(args, callbackContext);
+            return true;
         }
         return false;
+    }
+
+    private void executeUserIsChild(JSONArray args, CallbackContext callbackContext) {
+        isChild = args[0];
+        AdSettings.setIsChildDirected(isChild);
     }
 
     private void executeGetDeferredApplink(JSONArray args,
@@ -677,6 +691,11 @@ public class ConnectPlugin extends CordovaPlugin {
         if (args.length() == 0) {
             // Not enough parameters
             callbackContext.error("Invalid arguments");
+            return;
+        }
+
+        if(isChild) {
+            callbackContext.error("Feature disabled for a CHILD user.");
             return;
         }
 

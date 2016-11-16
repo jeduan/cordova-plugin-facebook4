@@ -12,6 +12,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
+#import <FBAudienceNetwork/FBAudienceNetwork.h>
 #import <Cordova/CDV.h>
 #import "AppDelegate.h"
 
@@ -27,4 +28,5 @@
 - (void)appInvite:(CDVInvokedUrlCommand *) command;
 - (void)getDeferredApplink:(CDVInvokedUrlCommand *) command;
 - (void)activateApp:(CDVInvokedUrlCommand *)command;
+- (void)userIsChild:(CDVInvokedUrlCommand *)command;
 @end

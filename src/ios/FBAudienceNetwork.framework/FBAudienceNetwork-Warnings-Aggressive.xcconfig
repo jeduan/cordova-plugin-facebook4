@@ -1,0 +1,8 @@
+// Copyright 2004-present Facebook. All Rights Reserved.
+
+#include "FBAudienceNetwork-Warnings.xcconfig"
+
+// Extra flags
+WARNING_CFLAGS = -Weverything -Wno-error-deprecated-declarations -Wno-error-deprecated-implementations -Wno-objc-missing-property-synthesis -Wno-unused-parameter -Wno-covered-switch-default -Wno-direct-ivar-access -Wno-assign-enum -Wno-float-equal -Wno-vla -Wno-pedantic -Wno-documentation-unknown-command -Wno-packed -Wno-padded -Wno-auto-import -Wno-selector -Wno-sign-conversion -Wsemicolon-before-method-body -Widiomatic-parentheses -Wno-double-promotion -Wno-c++98-compat-pedantic -Wsequence-point -Wno-ignored-qualifiers -Wno-old-style-cast -Wno-nullable-to-nonnull-conversion -Wno-global-constructors -Wno-bad-function-cast -Wno-incompatible-pointer-types-discards-qualifiers -Wno-cast-qual -Wno-reserved-id-macro -Wused-but-marked-unused
+
+//WARNING_CFLAGS = -Wno-error-deprecated-declarations -Wno-error-deprecated-implementations -Wno-objc-missing-property-synthesis -Wno-unused-parameter -Wno-covered-switch-default -Wno-direct-ivar-access -Wno-assign-enum -Wno-float-equal -Wno-vla -Wno-pedantic -Wno-documentation-unknown-command -Wno-packed -Wno-padded -Wno-auto-import -Wno-selector -Wno-sign-conversion -Wsemicolon-before-method-body -Widiomatic-parentheses -Wcstring-format-directive -Wswitch-enum -Woverriding-method-mismatch -Wpartial-availability -Wunused-exception-parameter -Wunused-macros -Wsequence-point -Wundef -Wmethod-signatures -Wformat-nonliteral -Wmissing-noreturn -Wduplicate-method-arg -Wobjc-interface-ivars -Wunused-property-ivar Wmissing-variable-declarations
