@@ -359,7 +359,12 @@ public class ConnectPlugin extends CordovaPlugin {
     }
 
     private void executeUserIsChild(JSONArray args, CallbackContext callbackContext) {
-        isChild = args[0];
+        try {
+            isChild = args.getBoolean(0);
+        } catch (JSONException e) {
+            isChild = false;
+        }
+
         AdSettings.setIsChildDirected(isChild);
     }
 
