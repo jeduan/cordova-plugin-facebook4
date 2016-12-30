@@ -10,21 +10,21 @@ When creating a Github issue **remember to**:
 
 ### Troubleshooting contents
 - [**General**](#general)
-	- [How do I Build without Eclipse?](#how-do-i-build-without-eclipse)
-	- [How do I Add a Like Button?](#how-do-i-add-a-like-button)
-	- [Where is the init API?](#where-is-the-init-api)
-	- [How to install with NPM PhoneGap?](#how-to-install-with-npm-phonegap)
+  - [How do I Build without Eclipse?](#how-do-i-build-without-eclipse)
+  - [How do I Add a Like Button?](#how-do-i-add-a-like-button)
+  - [Where is the init API?](#where-is-the-init-api)
+  - [How to install with NPM PhoneGap?](#how-to-install-with-npm-phonegap)
 
 - [**Android**](#android)
-	- [No Reply From Login?](#no-reply-from-login)
-	- [Facebook error: Session was closed and was not closed normally](#facebook-error-session-was-closed-and-was-not-closed-normally)
-	- [My Hash Does Not Work, I am Using Windows](#my-hash-does-not-work-i-am-using-windows)
-	- [Jar mismatch! Fix your dependencies](#jar-mismatch-fix-your-dependencies)
-	- [Open Fullscreen Dialog in Landscape Orientation](#open-fullscreen-dialog-in-landscape-orientation)
+  - [No Reply From Login?](#no-reply-from-login)
+  - [Facebook error: Session was closed and was not closed normally](#facebook-error-session-was-closed-and-was-not-closed-normally)
+  - [My Hash Does Not Work, I am Using Windows](#my-hash-does-not-work-i-am-using-windows)
+  - [Jar mismatch! Fix your dependencies](#jar-mismatch-fix-your-dependencies)
+  - [Open Fullscreen Dialog in Landscape Orientation](#open-fullscreen-dialog-in-landscape-orientation)
 
 - [**iOS**](#ios)
-	- [Missing FacebookConnectPlugin](#missing-facebookconnectplugin)
-	- [Login Always Opens Web Dialog Even Though Native App is Installed](#login-always-opens-web-dialog-even-though-native-app-is-installed)
+  - [Missing FacebookConnectPlugin](#missing-facebookconnectplugin)
+  - [Login Always Opens Web Dialog Even Though Native App is Installed](#login-always-opens-web-dialog-even-though-native-app-is-installed)
 
 ## General
 ### How do I Build without Eclipse?
@@ -159,7 +159,7 @@ to
 ```
 WebDialog.FeedDialogBuilder feedDialog = (new WebDialog.FeedDialogBuilder(me.cordova.getActivity(), Session.getActiveSession(), paramBundle)).setOnCompleteListener(dialogCallback);
 if (cordova.getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-	feedDialog.setTheme(android.R.style.Theme_Wallpaper_NoTitleBar_Fullscreen);
+  feedDialog.setTheme(android.R.style.Theme_Wallpaper_NoTitleBar_Fullscreen);
 }
 feedDialog.build().show();
 ```
@@ -168,7 +168,7 @@ Change the feed dialog from:
 
 ```
 WebDialog requestsDialog = (new WebDialog.RequestsDialogBuilder(me.cordova.getActivity(), Session.getActiveSession(), paramBundle)).setOnCompleteListener(dialogCallback)
-	.build();
+  .build();
 requestsDialog.show();
 ```
 
@@ -177,7 +177,7 @@ to
 ```
 WebDialog.RequestsDialogBuilder requestsDialog = (new WebDialog.RequestsDialogBuilder(me.cordova.getActivity(), Session.getActiveSession(), paramBundle)).setOnCompleteListener(dialogCallback);
 if (cordova.getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-	requestsDialog.setTheme(android.R.style.Theme_Wallpaper_NoTitleBar_Fullscreen);
+  requestsDialog.setTheme(android.R.style.Theme_Wallpaper_NoTitleBar_Fullscreen);
 }
 requestsDialog.build().show();
 ```
@@ -185,24 +185,31 @@ requestsDialog.build().show();
 ## iOS
 ### Missing FacebookConnectPlugin
 - Problem:
-	- `CDVPlugin class FacebookConnectPlugin (pluginName: facebookconnectplugin) does not exist.`
+  - `CDVPlugin class FacebookConnectPlugin (pluginName: facebookconnectplugin) does not exist.`
 - Solution:
-	1. Open up Xcode
-	2. Go to "Build Phases"
-	3. Ensure that the following file is added under "Compile Sources":
-		- `FacebookConnectPlugin.m`
-	4. Ensure that the following is added under "Link Binary With Libraris":
-		- `FacebookSDK.framework`
-		- `libsqlite3.dylib`
-		- `Social.framework`
-		- `Accounts.framework`
-		- `Security.framework`
+  1. Open up Xcode
+  2. Go to "Build Phases"
+  3. Ensure that the following file is added under "Compile Sources":
+    - `FacebookConnectPlugin.m`
+  4. Ensure that the following is added under "Link Binary With Libraris":
+    - `FacebookSDK.framework`
+    - `libsqlite3.dylib`
+    - `Social.framework`
+    - `Accounts.framework`
+    - `Security.framework`
 
 Cordova and plugman seems to have some problems adding frameworks etc. when re-installing/upgrading plugins.
 
 
 ### Login Always Opens Web Dialog Even Though Native App is Installed
 - Problem:
-	- Calling the login function always opens the web dialog even though the native app is installed on the device.
+  - Calling the login function always opens the web dialog even though the native app is installed on the device.
 - Solution:
-	- Switch "deep linking" to ON in the Facebook developer website settings for your application
+  - Switch "deep linking" to ON in the Facebook developer website settings for your application
+
+### Login dialog doen't show on iOS10
+- Problem:
+  - Calling the login function doen't do anything, No errors are thrown and no dialogs are shown.
+- Solution:
+  - iOS 10 requires additional entries in the Content-Security-Policy meta tag, namely gap://ready and file:. After adding this, Content-Security-Policy should looks like this: ```sh<meta http-equiv="Content-Security-Policy" content="default-src * gap://ready; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src * 'unsafe-inline' 'unsafe-eval'">```
+
