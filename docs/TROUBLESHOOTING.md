@@ -211,5 +211,7 @@ Cordova and plugman seems to have some problems adding frameworks etc. when re-i
 - Problem:
   - Calling the login function doen't do anything, No errors are thrown and no dialogs are shown.
 - Solution:
-  - iOS 10 requires additional entries in the Content-Security-Policy meta tag, namely gap://ready and file:. After adding this, Content-Security-Policy should looks like this: ```sh<meta http-equiv="Content-Security-Policy" content="default-src * gap://ready; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src * 'unsafe-inline' 'unsafe-eval'">```
+  - iOS 10 requires additional entries in the Content-Security-Policy meta tag, namely gap://ready and file:. After adding this, Content-Security-Policy should looks like this: 
+  
+ ```<meta http-equiv="Content-Security-Policy" content="default-src * gap://ready; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src * 'unsafe-inline' 'unsafe-eval'">```
 
