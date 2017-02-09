@@ -216,7 +216,9 @@ Example options:
 
     {
       url: "http://example.com",
-      picture: "http://example.com/image.png"
+      picture: "http://example.com/image.png",
+      promotionText: "Enter some promo text here",
+      promotionCode: $scope.referral.mycode
     }
 
 ## Sample Code
