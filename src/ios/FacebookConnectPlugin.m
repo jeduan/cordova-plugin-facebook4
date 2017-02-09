@@ -475,8 +475,8 @@
     }
 
     if (promotionText && promotionCode) {
-        content.promotionCode = promotionText;
-        content.promotionText = promotionCode;
+        content.promotionCode = promotionCode;
+        content.promotionText = promotionText;
     }
 
     
