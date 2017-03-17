@@ -406,6 +406,25 @@
     }
 
     NSString *graphPath = [command argumentAtIndex:0];
+    NSArray *arrUrlParts = [graphPath componentsSeparatedByString:@"?"];
+    NSString *graphAction = [arrUrlParts objectAtIndex:0];
+    NSString *httpMethod = @"GET";
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+
+    if ([arrUrlParts count] > 1) {
+        NSArray *arrQueryString = [[arrUrlParts objectAtIndex:1] componentsSeparatedByString:@"&"];
+        for (int i=0; i < [arrQueryString count]; i++) {
+            if ([arrQueryString objectAtIndex:i] == @"post"){
+                httpMethod = @"POST";
+            } else {
+                NSArray *arrElement = [[arrQueryString objectAtIndex:i] componentsSeparatedByString:@"="];
+                if ([arrElement count] == 2) {
+                    [params setObject:[arrElement objectAtIndex:1] forKey:[arrElement objectAtIndex:0]];
+                }
+            }
+        }
+    }
+
     NSArray *permissionsNeeded = [command argumentAtIndex:1];
     NSSet *currentPermissions = [FBSDKAccessToken currentAccessToken].permissions;
 
@@ -439,7 +458,7 @@
     };
 
     NSLog(@"Graph Path = %@", graphPath);
-    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:graphPath parameters:nil];
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:graphAction parameters:params HTTPMethod:httpMethod];
 
     // If we have permissions to request
     if ([permissions count] == 0){
