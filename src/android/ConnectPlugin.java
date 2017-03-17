@@ -848,7 +848,20 @@ public class ConnectPlugin extends CordovaPlugin {
 
         String[] urlParts = graphPath.split("\\?");
         String graphAction = urlParts[0];
-        GraphRequest graphRequest = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(), graphAction, new GraphRequest.Callback() {
+
+        boolean hasPostParameter = false;
+
+        if (urlParts.length > 1) {
+            String[] queries = urlParts[1].split("&");
+            for (String query : queries) {              
+                if (query.equals("post")) {
+                    hasPostParameter = true;
+                    break;
+                }
+            }
+        }
+        
+        GraphRequest.Callback callback = new GraphRequest.Callback() {
             @Override
             public void onCompleted(GraphResponse response) {
                 if (graphContext != null) {
@@ -861,7 +874,14 @@ public class ConnectPlugin extends CordovaPlugin {
                     graphContext = null;
                 }
             }
-        });
+        };
+
+        GraphRequest graphRequest = null;
+        if (hasPostParameter) {
+            graphRequest = GraphRequest.newPostRequest(AccessToken.getCurrentAccessToken(), graphAction, null, callback);
+        } else {
+            graphRequest = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(), graphAction, callback);
+        }
 
         Bundle params = graphRequest.getParameters();
 
@@ -881,6 +901,7 @@ public class ConnectPlugin extends CordovaPlugin {
         graphRequest.setParameters(params);
         graphRequest.executeAsync();
     }
+  
 
     /*
      * Checks for publish permissions
