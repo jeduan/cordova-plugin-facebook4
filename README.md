@@ -1,4 +1,4 @@
-# cordova-plugin-facebook4 (post enabled)
+# cordova-plugin-facebook4 (POST request enabled)
 
 > Use Facebook SDK version 4 in Cordova projects
 
