@@ -1,4 +1,4 @@
-# cordova-plugin-facebook4
+# cordova-plugin-facebook4 (post enabled)
 
 > Use Facebook SDK version 4 in Cordova projects
 
@@ -184,6 +184,9 @@ For more information see:
 - Graph Explorer - [https://developers.facebook.com/tools/explorer](https://developers.facebook.com/tools/explorer)
 - Graph API - [https://developers.facebook.com/docs/graph-api/](https://developers.facebook.com/docs/graph-api/)
 
+**Note for POST request: add 'post' query on your query to enable POST request**
+
+	Facebook.api("me/feed?post&message=Hello World", ["publish_actions"])
 
 # Events
 
