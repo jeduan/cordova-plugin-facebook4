@@ -396,6 +396,27 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (NSArray *) getDataOfQueryString:(NSString *)url
+{
+    NSArray *strURLParse = [url componentsSeparatedByString:@"?"];
+    NSMutableArray *arrQueryStringData = [[NSMutableArray alloc] init];
+    if ([strURLParse count] < 2) {
+        return arrQueryStringData;
+    }
+    NSArray *arrQueryString = [[strURLParse objectAtIndex:1] componentsSeparatedByString:@"&"];
+
+    for (int i=0; i < [arrQueryString count]; i++) {
+        NSMutableDictionary *dicQueryStringElement = [[NSMutableDictionary alloc]init];
+        NSArray *arrElement = [[arrQueryString objectAtIndex:i] componentsSeparatedByString:@"="];
+        if ([arrElement count] == 2) {
+            [dicQueryStringElement setObject:[arrElement objectAtIndex:1] forKey:[arrElement objectAtIndex:0]];
+        }
+        [arrQueryStringData addObject:dicQueryStringElement];
+    }
+
+    return arrQueryStringData; 
+}
+
 - (void) graphApi:(CDVInvokedUrlCommand *)command
 {
     CDVPluginResult *pluginResult;
@@ -414,7 +435,7 @@
     if ([arrUrlParts count] > 1) {
         NSArray *arrQueryString = [[arrUrlParts objectAtIndex:1] componentsSeparatedByString:@"&"];
         for (int i=0; i < [arrQueryString count]; i++) {
-            if ([arrQueryString objectAtIndex:i] == @"post"){
+            if ([[arrQueryString objectAtIndex:i] isEqualToString:@"post"]){
                 httpMethod = @"POST";
             } else {
                 NSArray *arrElement = [[arrQueryString objectAtIndex:i] componentsSeparatedByString:@"="];
