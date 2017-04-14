@@ -29,6 +29,14 @@ exports.logEvent = function logEvent (name, params, valueToSum, s, f) {
   }
 }
 
+exports.setUserID = function setUserID (id, s, f){
+  exec(s, f, 'FacebookConnectPlugin', 'setUserID', [id])
+}
+
+exports.updateUserProperties = function updateUserProperties (params, s, f){
+  exec(s, f, 'FacebookConnectPlugin', 'updateUserProperties', [params])
+}
+
 exports.logPurchase = function logPurchase (value, currency, s, f) {
   exec(s, f, 'FacebookConnectPlugin', 'logPurchase', [value, currency])
 }

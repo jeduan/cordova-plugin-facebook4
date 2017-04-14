@@ -7,6 +7,7 @@
 //  Updated by Christine Abernathy on 13-01-22
 //  Updated by Jeduan Cornejo on 15-07-04
 //  Updated by Eds Keizer on 16-06-13
+//  Updated by Bhavik Patel on 17-04-12
 //  Copyright 2011 Nitobi, Mathijs de Bruin. All rights reserved.
 //
 
@@ -91,7 +92,7 @@
         CDVPluginResult *res;
         NSDictionary *params;
         double value;
-
+        
         if ([command.arguments count] == 1) {
             [FBSDKAppEvents logEvent:eventName];
 
@@ -112,6 +113,38 @@
         res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
     }];
+}
+
+- (void)setUserID:(CDVInvokedUrlCommand *)command{
+  if ([command.arguments count] != 1) {
+      // Need only one param
+      CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
+      [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+      return;
+  }
+  CDVPluginResult *res;
+  NSString *userID = [command.arguments objectAtIndex:0];
+  [FBSDKAppEvents setUserID:(NSString *)userID];
+
+  res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+  [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+}
+
+- (void)updateUserProperties:(CDVInvokedUrlCommand *)command{
+  if ([command.arguments count] != 1) {
+      // Not enough arguments
+      CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
+      [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+      return;
+  }
+  
+  NSDictionary *params = [command.arguments objectAtIndex:0];
+  CDVPluginResult *res;
+  
+  [FBSDKAppEvents updateUserProperties:params handler:nil];
+  
+  res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+  [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
 }
 
 - (void)logPurchase:(CDVInvokedUrlCommand *)command {

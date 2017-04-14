@@ -19,6 +19,8 @@
 - (void)getLoginStatus:(CDVInvokedUrlCommand *)command;
 - (void)getAccessToken:(CDVInvokedUrlCommand *)command;
 - (void)logEvent:(CDVInvokedUrlCommand *)command;
+- (void)setUserID:(CDVInvokedUrlCommand *)command;
+- (void)updateUserProperties:(CDVInvokedUrlCommand *)command;
 - (void)logPurchase:(CDVInvokedUrlCommand *)command;
 - (void)login:(CDVInvokedUrlCommand *)command;
 - (void)checkHasCorrectPermissions:(CDVInvokedUrlCommand *)command;

@@ -80,9 +80,33 @@ exports.logEvent = function logEvent (eventName, params, valueToSum, s, f) {
       logEvent(eventName, params, valueToSum, s, f);
     });
   }
-
+  
   FB.AppEvents.logEvent(eventName, valueToSum, params);
 
+  if(s) s();
+}
+
+exports.setUserID = function setUserID (id, s, f){
+  if (!__fbSdkReady) {
+    return __fbCallbacks.push(function() {
+      updateUserProperties(params);
+    });
+  }
+  
+  FB.AppEvents.setUserID(params);
+  
+  if(s) s();
+}
+
+exports.updateUserProperties = function (params, s, f){
+  if (!__fbSdkReady) {
+    return __fbCallbacks.push(function() {
+      updateUserProperties(params);
+    });
+  }
+  
+  FB.AppEvents.updateUserProperties(params);
+  
   if(s) s();
 }
 

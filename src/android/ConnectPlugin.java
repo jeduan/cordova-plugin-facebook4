@@ -54,6 +54,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import static android.R.attr.type;
+
 public class ConnectPlugin extends CordovaPlugin {
 
     private static final int INVALID_ERROR_CODE = -2; //-1 is FacebookRequestError.INVALID_ERROR_CODE
@@ -305,6 +307,14 @@ public class ConnectPlugin extends CordovaPlugin {
 
         } else if (action.equals("logEvent")) {
             executeLogEvent(args, callbackContext);
+            return true;
+
+        } else if (action.equals("setUserID")) {
+            executeSetUserID(args, callbackContext);
+            return true;
+
+        } else if (action.equals("updateUserProperties")) {
+            executeUpdateUserProperties(args, callbackContext);
             return true;
 
         } else if (action.equals("logPurchase")) {
@@ -725,6 +735,66 @@ public class ConnectPlugin extends CordovaPlugin {
         }
     }
 
+    private void executeSetUserID(JSONArray args, CallbackContext callbackContext) throws JSONException {
+      if (args.length() != 1) {
+          // Not enough parameters
+          callbackContext.error("Invalid arguments");
+          return;
+      }
+      String userID = args.getString(0);
+      logger.setUserID(userID);
+      callbackContext.success();
+      return;
+    }
+    
+    private void executeUpdateUserProperties(JSONArray args, final CallbackContext callbackContext) throws JSONException {
+      if (args.length() != 1) {
+          // Not enough parameters
+          callbackContext.error("Invalid arguments");
+          return;
+      }
+
+      JSONObject params = args.getJSONObject(0);
+      Bundle parameters = new Bundle();
+      Iterator<String> iter = params.keys();
+
+      while (iter.hasNext()) {
+          String key = iter.next();
+          try {
+              // Try get a String
+              String value = params.getString(key);
+              parameters.putString(key, value);
+              Log.w(TAG, "Key = " + key + " Value = " + value);
+          } catch (JSONException e) {
+              // Maybe it was an int
+              Log.w(TAG, "Type in AppEvent parameters was not String for key: " + key);
+              try {
+                  int value = params.getInt(key);
+                  parameters.putInt(key, value);
+              } catch (JSONException e2) {
+                  callbackContext.error("Unsupported type in AppEvent parameters for key: " + key);
+              }
+          }
+      }
+
+      logger.updateUserProperties(parameters, new GraphRequest.Callback() {
+          @Override
+          public void onCompleted(GraphResponse graphResponse) {
+              JSONObject jsonObj = graphResponse.getJSONObject();
+              try {
+                  boolean success = jsonObj.getBoolean("success");
+                  if(success) {
+                      callbackContext.success();
+                  } else {
+                      callbackContext.error(jsonObj.getString("error"));
+                  }
+              } catch(JSONException e) {
+                  callbackContext.error("Bad JSON Response");
+              }
+          }
+      });
+    }
+        
     private void executeLogin(JSONArray args, CallbackContext callbackContext) throws JSONException {
         Log.d(TAG, "login FB");
         // Get the permissions
