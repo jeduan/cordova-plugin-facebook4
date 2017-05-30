@@ -832,11 +832,16 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
 
 + (void)load
 {
+    FBMethodSwizzle([self class], @selector(application:openURL:options:));
     FBMethodSwizzle([self class], @selector(application:openURL:sourceApplication:annotation:));
 }
 
 // This method is a duplicate of the other openURL method below, except using the newer iOS (9) API.
-- (void)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
+- (void)noop_application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options
+{
+}
+
+- (void)swizzled_application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
     if (!url) {
         return;
     }
@@ -844,7 +849,7 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
     [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
     
     // Call existing method
-    [self swizzled_application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
+    [self swizzled_application:application openURL:url options:options];
     
     // NOTE: Cordova will run a JavaScript method here named handleOpenURL. This functionality is deprecated
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
