@@ -243,6 +243,49 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)postToFacebook:(CDVInvokedUrlCommand *)command {
+    NSLog(@"posting");
+    CDVPluginResult* pluginResult = nil;
+    //NSString* myarg = [command.arguments objectAtIndex:0];
+    
+    if (! [FBSDKAccessToken currentAccessToken]) {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                         messageAsString:@"You are not logged in."];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }
+    
+    NSDictionary *postData = [command.arguments objectAtIndex:0][0];
+    
+    NSDictionary *params = @{
+                             @"message": [postData valueForKey:@"message"],
+                             @"link"   : [postData valueForKey:@"link"],
+                             @"place"  : [postData valueForKey:@"place"]
+                             };
+    
+    // make the API call
+    FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc]
+                                  initWithGraphPath:@"/me/feed"
+                                  parameters:params
+                                  HTTPMethod:@"POST"];
+    [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection,id result, NSError *error) {
+        // Handle the result
+        CDVPluginResult* pluginResult;
+        if (error) {
+            NSString *message = error.userInfo[FBSDKErrorLocalizedDescriptionKey] ?: @"There was an error making the graph call.";
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                             messageAsString:message];
+        } else {
+            NSDictionary *response = (NSDictionary *) result;
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:response];
+        }
+        NSLog(@"Finished GraphAPI request");
+        
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
+    
+}
+
+
 - (void) showDialog:(CDVInvokedUrlCommand*)command
 {
     if ([command.arguments count] == 0) {
