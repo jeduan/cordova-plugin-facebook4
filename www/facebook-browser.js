@@ -59,9 +59,13 @@ exports.login = function login (permissions, s, f) {
   FB.login(function (response) {
     if (response.authResponse) {
       s(response)
-    } else {
+    } else if (response.status) {
       f(response.status.message)
-    }
+    } else if (response) {
+      f(response)
+    }  else {
+      f('No response')
+    } 
   }, options)
 }
 
