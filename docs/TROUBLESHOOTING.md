@@ -14,6 +14,7 @@ When creating a Github issue **remember to**:
 	- [How do I Add a Like Button?](#how-do-i-add-a-like-button)
 	- [Where is the init API?](#where-is-the-init-api)
 	- [How to install with NPM PhoneGap?](#how-to-install-with-npm-phonegap)
+	- [Coexist with inAppBrowser plugin](#coexist-with-inappbrowser-plugin)
 
 - [**Android**](#android)
 	- [No Reply From Login?](#no-reply-from-login)
@@ -78,6 +79,33 @@ Im getting the message "[error] Variable(s) missing: APP_ID, APP_NAME"
 `cd to/your/project`
 
 `phonegap local plugin add /path/to/here/phonegap-facebook-plugin --variable APP_ID="12345678910" --variable APP_NAME="AwesomeApp"`
+
+## Coexist with inAppBrowser plugin
+
+Facebook SDK uses window.open, inAppBrowser replaces window.open variables, but this happens in the deviceReady event.
+
+This problem can be solved as well.
+
+Before the deviceReady event you have to create a global variable.
+
+`var browserDefault = window.open;`
+
+Now window.open is safe.
+
+After the deviceReady event the following.
+
+```
+delete window.open;
+window.open = browserDefault;
+myBrowserExtra = cordova.InAppBrowser;
+```
+
+Now we can call to open with cordova-plugin-inappbrowser as well
+
+`myBrowserExtra.open(....);`
+
+And cordova-plugin-facebook4 will continue to function normally since we have eliminated overwriting
+
 
 ## Android
 ### No Reply From Login?
