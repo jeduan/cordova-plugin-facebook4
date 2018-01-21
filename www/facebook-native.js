@@ -46,6 +46,11 @@ exports.api = function api (graphPath, permissions, s, f) {
   exec(s, f, 'FacebookConnectPlugin', 'graphApi', [graphPath, permissions])
 }
 
+exports.post = function post (graphPath, body, permissions, s, f) {
+  permissions = permissions || []
+  exec(s, f, 'FacebookConnectPlugin', 'graphApiPost', [graphPath, body, permissions])
+}
+
 exports.appInvite = function appLinks (options, s, f) {
   options = options || {}
   exec(s, f, 'FacebookConnectPlugin', 'appInvite', [options])

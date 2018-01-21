@@ -149,6 +149,24 @@ exports.api = function api (graphPath, permissions, s, f) {
   })
 }
 
+// Added for full support of FB.api - https://developers.facebook.com/docs/javascript/reference/FB.api
+exports.post = function post (graphPath, body, permissions, s, f) {
+  if (!__fbSdkReady) {
+    return __fbCallbacks.push(function() {
+      api(graphPath, body, permissions, s, f);
+    });
+  }
+
+  // JS API does not take additional permissions
+  FB.api(graphPath, 'post', body, function (response) {
+    if (response.error) {
+      f(response)
+    } else {
+      s(response)
+    }
+  })
+}
+
 exports.browserInit = function browserInit (appId, version, s) {
   console.warn("browserInit is deprecated and may be removed in the future");
   console.trace();
