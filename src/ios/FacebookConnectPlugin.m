@@ -226,6 +226,33 @@
     
 }
 
+- (void) checkHasCorrectPermissions:(CDVInvokedUrlCommand*)command
+{
+
+    NSArray *permissions = nil;
+
+    if ([command.arguments count] > 0) {
+        permissions = command.arguments;
+    }
+    
+    NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions; 
+
+    for (NSString *value in permissions) {
+    	NSLog(@"Checking permission %@.", value);
+        if (![grantedPermissions containsObject:value]) { //checks if permissions does not exists
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+            												 messageAsString:@"A permission has been denied"];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            return;
+        }
+    }
+    
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+    												 messageAsString:@"All permissions have been accepted"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    return;
+}
+
 - (void) logout:(CDVInvokedUrlCommand*)command
 {
     if ([FBSDKAccessToken currentAccessToken]) {
@@ -294,6 +321,7 @@
         content.contentTitle = params[@"caption"];
         content.imageURL = [NSURL URLWithString:params[@"picture"]];
         content.contentDescription = params[@"description"];
+        content.hashtag = [FBSDKHashtag hashtagWithString:[params objectForKey:@"hashtag"]];
         content.quote = params[@"quote"];
         
         self.dialogCallbackId = command.callbackId;
@@ -875,30 +903,31 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
 }
 
 // This method is a duplicate of the other openURL method below, except using the newer iOS (9) API.
-- (void)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
     if (!url) {
-        return;
+        return NO;
     }
     // Required by FBSDKCoreKit for deep linking/to complete login
     [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
-    
-    // Call existing method
-    [self swizzled_application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
     
     // NOTE: Cordova will run a JavaScript method here named handleOpenURL. This functionality is deprecated
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
     NSLog(@"FB handle url: %@", url);
+
+    // Call existing method
+    return [self swizzled_application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
 }
 
-- (void)noop_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+- (BOOL)noop_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
+    return NO;
 }
 
-- (void)swizzled_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+- (BOOL)swizzled_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     if (!url) {
-        return;
+        return NO;
     }
     // Required by FBSDKCoreKit for deep linking/to complete login
     [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
@@ -910,5 +939,8 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
     NSLog(@"FB handle url: %@", url);
+    
+    // Call existing method
+    return [self swizzled_application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 }
 @end
