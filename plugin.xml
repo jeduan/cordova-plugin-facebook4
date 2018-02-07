@@ -12,7 +12,7 @@
       The Facebook plugin for Apache Cordova allows you to use the same JavaScript code in your
       Cordova application as you use in your web application.
     </description>
-        
+
     <repo>https://github.com/jeduan/cordova-plugin-facebook4</repo>
 
     <license>Apache 2.0</license>
@@ -46,8 +46,7 @@
             <preference name="android-minSdkVersion" value="15" />
         </config-file>
 
-        <source-file src="src/android/facebookconnect.xml" target-dir="res/values" />
-        <config-file target="res/values/facebookconnect.xml" parent="/*">
+        <config-file target="res/values/strings.xml" parent="/resources">
             <string name="fb_app_id">$APP_ID</string>
             <string name="fb_app_name">$APP_NAME</string>
         </config-file>
