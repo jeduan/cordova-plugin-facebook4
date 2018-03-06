@@ -272,9 +272,6 @@
         // Create native params
         FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
         content.contentURL = [NSURL URLWithString:[params objectForKey:@"link"]];
-        content.contentTitle = [params objectForKey:@"caption"];
-        content.imageURL = [NSURL URLWithString:[params objectForKey:@"picture"]];
-        content.contentDescription = [params objectForKey:@"description"];
 
         self.dialogCallbackId = command.callbackId;
         [FBSDKMessageDialog showWithContent:content delegate:self];
@@ -284,9 +281,6 @@
         // Create native params
         FBSDKShareLinkContent *content = [[FBSDKShareLinkContent alloc] init];
         content.contentURL = [NSURL URLWithString:params[@"href"]];
-        content.contentTitle = params[@"caption"];
-        content.imageURL = [NSURL URLWithString:params[@"picture"]];
-        content.contentDescription = params[@"description"];
         content.hashtag = [FBSDKHashtag hashtagWithString:[params objectForKey:@"hashtag"]];
         content.quote = params[@"quote"];
 
@@ -836,41 +830,40 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
 }
 
 // This method is a duplicate of the other openURL method below, except using the newer iOS (9) API.
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
+- (void)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
     if (!url) {
-        return NO;
+        return;
     }
     // Required by FBSDKCoreKit for deep linking/to complete login
     [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
     
+    // Call existing method
+    [self swizzled_application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
+    
     // NOTE: Cordova will run a JavaScript method here named handleOpenURL. This functionality is deprecated
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
     NSLog(@"FB handle url: %@", url);
-
-    // Call existing method
-    return [self swizzled_application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
 }
 
-- (BOOL)noop_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+- (void)noop_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    return NO;
 }
 
-- (BOOL)swizzled_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+- (void)swizzled_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     if (!url) {
-        return NO;
+        return;
     }
     // Required by FBSDKCoreKit for deep linking/to complete login
     [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 
+    // Call existing method
+    [self swizzled_application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+
     // NOTE: Cordova will run a JavaScript method here named handleOpenURL. This functionality is deprecated
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
     NSLog(@"FB handle url: %@", url);
-    
-    // Call existing method
-    return [self swizzled_application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 }
 @end
