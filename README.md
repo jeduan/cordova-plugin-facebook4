@@ -11,6 +11,11 @@ Make sure you've registered your Facebook app with Facebook and have an `APP_ID`
 ```bash
 $ cordova plugin add cordova-plugin-facebook4 --save --variable APP_ID="123456789" --variable APP_NAME="myApplication"
 ```
+or if you use several apps with same facebook app
+
+```bash
+$ cordova plugin add cordova-plugin-facebook4 --save --variable APP_ID="123456789" --variable APP_NAME="myApplication" --variable URL_SCHEMA="mySuffix"
+```
 
 If you need to change your `APP_ID` after installation, it's recommended that you remove and then re-add the plugin as above. Note that changes to the `APP_ID` value in your `config.xml` file will *not* be propagated to the individual platform builds.
 
