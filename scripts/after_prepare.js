@@ -3,20 +3,12 @@
 
 var fs = require('fs');
 
-var getPreferenceValue = function(config, name) {
-    var value = config.match(new RegExp('name="' + name + '" value="(.*?)"', "i"))
-    if(value && value[1]) {
-        return value[1]
-    } else {
-        return null
-    }
-}
-
 if(process.argv.join("|").indexOf("APP_ID=") > -1) {
 	var APP_ID = process.argv.join("|").match(/APP_ID=(.*?)(\||$)/)[1]
 } else {
-	var config = fs.readFileSync("config.xml").toString()
-	var APP_ID = getPreferenceValue(config, "APP_ID")
+	var config = fs.readFileSync("package.json").toString();
+	var json = JSON.parse(config);
+	var APP_ID = json["cordova"]["plugins"]["cordova-plugin-facebook4"]["APP_ID"];
 }
 
 var files = [
