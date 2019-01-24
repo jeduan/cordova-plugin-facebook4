@@ -310,6 +310,9 @@ public class ConnectPlugin extends CordovaPlugin {
             });
 
             return true;
+        } else if (action.equals("setAdvertiserIDCollectionEnabled")) {
+            executeSetAdvertiserIDCollectionEnabled(args, callbackContext);
+            return true;
         }
         return false;
     }
@@ -332,6 +335,25 @@ public class ConnectPlugin extends CordovaPlugin {
                         return;
                     }
                 });
+    }
+
+    private void executeSetAdvertiserIDCollectionEnabled(JSONArray args, final CallbackContext callbackContext) {
+        if (args.length() != 1) {
+            // We expect a single boolean parameter
+            callbackContext.error("Invalid arguments");
+            return;
+        }
+
+        Boolean flag;
+        try {
+            flag = args.getBoolean(0);
+        } catch (JSONException e) {
+            Log.w(TAG, "Non-boolean method parameter provided to executeSetAdvertiserIDCollectionEnabled");
+            callbackContext.error("Invalid arguments");
+        }
+
+        FacebookSdk.setAdvertiserIDCollectionEnabled(flag);
+        callbackContext.success();
     }
 
     private void executeDialog(JSONArray args, CallbackContext callbackContext) throws JSONException {
