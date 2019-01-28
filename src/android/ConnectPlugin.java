@@ -343,18 +343,15 @@ public class ConnectPlugin extends CordovaPlugin {
             return;
         }
 
-        boolean flag;
         try {
-            flag = args.getBoolean(0);
+            boolean flag = args.getBoolean(0);
+            FacebookSdk.setAutoLogAppEventsEnabled(flag);
+            callbackContext.success();
+
         } catch (JSONException e) {
             Log.w(TAG, "Non-boolean method parameter provided to executeSetAutoLogAppEventsEnabled");
             callbackContext.error("Invalid arguments");
         }
-
-        if (flag != null) {
-            FacebookSdk.setAutoLogAppEventsEnabled(flag);
-        }
-        callbackContext.success();
     }
 
     private void executeDialog(JSONArray args, CallbackContext callbackContext) throws JSONException {
