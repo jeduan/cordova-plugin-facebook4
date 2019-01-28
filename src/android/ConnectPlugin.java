@@ -56,7 +56,7 @@ import java.util.Set;
 
 public class ConnectPlugin extends CordovaPlugin {
 
-    private static final int INVALID_ERROR_CODE = -2; //-1 is FacebookRequestError.INVALID_ERROR_CODE
+    private static final int INVALID_ERROR_CODE = -2; // -1 is FacebookRequestError.INVALID_ERROR_CODE
     private static final String PUBLISH_PERMISSION_PREFIX = "publish";
     private static final String MANAGE_PERMISSION_PREFIX = "manage";
     @SuppressWarnings("serial")
@@ -226,7 +226,8 @@ public class ConnectPlugin extends CordovaPlugin {
     @Override
     public void onResume(boolean multitasking) {
         super.onResume(multitasking);
-        // Developers can observe how frequently users activate their app by logging an app activation event.
+        // Developers can observe how frequently users activate their app by logging an
+        // app activation event.
         AppEventsLogger.activateApp(cordova.getActivity());
     }
 
@@ -277,8 +278,8 @@ public class ConnectPlugin extends CordovaPlugin {
 
         } else if (action.equals("logPurchase")) {
             /*
-             * While calls to logEvent can be made to register purchase events,
-             * there is a helper method that explicitly takes a currency indicator.
+             * While calls to logEvent can be made to register purchase events, there is a
+             * helper method that explicitly takes a currency indicator.
              */
             if (args.length() != 2) {
                 callbackContext.error("Invalid arguments");
@@ -317,13 +318,11 @@ public class ConnectPlugin extends CordovaPlugin {
         return false;
     }
 
-    private void executeGetDeferredApplink(JSONArray args,
-                                           final CallbackContext callbackContext) {
+    private void executeGetDeferredApplink(JSONArray args, final CallbackContext callbackContext) {
         AppLinkData.fetchDeferredAppLinkData(cordova.getActivity().getApplicationContext(),
                 new AppLinkData.CompletionHandler() {
                     @Override
-                    public void onDeferredAppLinkDataFetched(
-                            AppLinkData appLinkData) {
+                    public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
                         PluginResult pr;
                         if (appLinkData == null) {
                             pr = new PluginResult(PluginResult.Status.OK, "");
@@ -344,7 +343,7 @@ public class ConnectPlugin extends CordovaPlugin {
             return;
         }
 
-        Boolean flag;
+        boolean flag;
         try {
             flag = args.getBoolean(0);
         } catch (JSONException e) {
@@ -412,7 +411,8 @@ public class ConnectPlugin extends CordovaPlugin {
                 builder.setObjectId(params.get("objectId"));
             if (params.containsKey("actionType")) {
                 try {
-                    final GameRequestContent.ActionType actionType = GameRequestContent.ActionType.valueOf(params.get("actionType"));
+                    final GameRequestContent.ActionType actionType = GameRequestContent.ActionType
+                            .valueOf(params.get("actionType"));
                     builder.setActionType(actionType);
                 } catch (IllegalArgumentException e) {
                     Log.w(TAG, "Discarding invalid argument actionType");
@@ -420,7 +420,8 @@ public class ConnectPlugin extends CordovaPlugin {
             }
             if (params.containsKey("filters")) {
                 try {
-                    final GameRequestContent.Filters filters = GameRequestContent.Filters.valueOf(params.get("filters"));
+                    final GameRequestContent.Filters filters = GameRequestContent.Filters
+                            .valueOf(params.get("filters"));
                     builder.setFilters(filters);
                 } catch (IllegalArgumentException e) {
                     Log.w(TAG, "Discarding invalid argument filters");
@@ -472,8 +473,8 @@ public class ConnectPlugin extends CordovaPlugin {
 
             String objectType = "";
 
-            while ( objectKeys.hasNext() ) {
-                String key = (String)objectKeys.next();
+            while (objectKeys.hasNext()) {
+                String key = (String) objectKeys.next();
                 String value = jObject.getString(key);
 
                 objectBuilder.putString(key, value);
@@ -494,8 +495,8 @@ public class ConnectPlugin extends CordovaPlugin {
 
                 Iterator<?> actionKeys = jActionProperties.keys();
 
-                while ( actionKeys.hasNext() ) {
-                    String actionKey = (String)actionKeys.next();
+                while (actionKeys.hasNext()) {
+                    String actionKey = (String) actionKeys.next();
 
                     actionBuilder.putString(actionKey, jActionProperties.getString(actionKey));
                 }
@@ -504,8 +505,7 @@ public class ConnectPlugin extends CordovaPlugin {
             actionBuilder.putObject(objectType, objectBuilder.build());
 
             ShareOpenGraphContent.Builder content = new ShareOpenGraphContent.Builder()
-                    .setPreviewPropertyName(objectType)
-                    .setAction(actionBuilder.build());
+                    .setPreviewPropertyName(objectType).setAction(actionBuilder.build());
 
             shareDialog.show(content.build());
 
@@ -520,13 +520,13 @@ public class ConnectPlugin extends CordovaPlugin {
             showDialogContext.sendPluginResult(pr);
 
             ShareLinkContent.Builder builder = new ShareLinkContent.Builder();
-            if(params.containsKey("link"))
+            if (params.containsKey("link"))
                 builder.setContentUrl(Uri.parse(params.get("link")));
-            if(params.containsKey("caption"))
+            if (params.containsKey("caption"))
                 builder.setContentTitle(params.get("caption"));
-            if(params.containsKey("picture"))
+            if (params.containsKey("picture"))
                 builder.setImageUrl(Uri.parse(params.get("picture")));
-            if(params.containsKey("description"))
+            if (params.containsKey("description"))
                 builder.setContentDescription(params.get("description"));
 
             messageDialog.show(builder.build());
@@ -538,7 +538,7 @@ public class ConnectPlugin extends CordovaPlugin {
 
     private void executeGraph(JSONArray args, CallbackContext callbackContext) throws JSONException {
         lastGraphContext = callbackContext;
-        CallbackContext graphContext  = callbackContext;
+        CallbackContext graphContext = callbackContext;
         PluginResult pr = new PluginResult(PluginResult.Status.NO_RESULT);
         pr.setKeepCallback(true);
         graphContext.sendPluginResult(pr);
@@ -589,7 +589,7 @@ public class ConnectPlugin extends CordovaPlugin {
 
         if (declinedPermission != null) {
             graphContext.error("This request needs declined permission: " + declinedPermission);
-			return;
+            return;
         }
 
         if (publishPermissions && readPermissions) {
@@ -662,7 +662,8 @@ public class ConnectPlugin extends CordovaPlugin {
     private void executeLogin(JSONArray args, CallbackContext callbackContext) throws JSONException {
         Log.d(TAG, "login FB");
 
-        // #568: Reset lastGraphContext in case it would still contains the last graphApi results of a previous session (login -> graphApi -> logout -> login)
+        // #568: Reset lastGraphContext in case it would still contains the last
+        // graphApi results of a previous session (login -> graphApi -> logout -> login)
         lastGraphContext = null;
 
         // Get the permissions
@@ -733,7 +734,8 @@ public class ConnectPlugin extends CordovaPlugin {
         try {
             Context appContext = cordova.getActivity().getApplicationContext();
             Resources res = appContext.getResources();
-            int enableHybridAppEventsId = res.getIdentifier("fb_hybrid_app_events", "bool", appContext.getPackageName());
+            int enableHybridAppEventsId = res.getIdentifier("fb_hybrid_app_events", "bool",
+                    appContext.getPackageName());
             boolean enableHybridAppEvents = enableHybridAppEventsId != 0 && res.getBoolean(enableHybridAppEventsId);
             if (enableHybridAppEvents) {
                 AppEventsLogger.augmentWebView((WebView) this.webView.getView(), appContext);
@@ -793,8 +795,8 @@ public class ConnectPlugin extends CordovaPlugin {
         }
     }
 
-    private void makeGraphCall(final CallbackContext graphContext ) {
-        //If you're using the paging URLs they will be URLEncoded, let's decode them.
+    private void makeGraphCall(final CallbackContext graphContext) {
+        // If you're using the paging URLs they will be URLEncoded, let's decode them.
         try {
             graphPath = URLDecoder.decode(graphPath, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -803,19 +805,20 @@ public class ConnectPlugin extends CordovaPlugin {
 
         String[] urlParts = graphPath.split("\\?");
         String graphAction = urlParts[0];
-        GraphRequest graphRequest = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(), graphAction, new GraphRequest.Callback() {
-            @Override
-            public void onCompleted(GraphResponse response) {
-                if (graphContext != null) {
-                    if (response.getError() != null) {
-                        graphContext.error(getFacebookRequestErrorResponse(response.getError()));
-                    } else {
-                        graphContext.success(response.getJSONObject());
+        GraphRequest graphRequest = GraphRequest.newGraphPathRequest(AccessToken.getCurrentAccessToken(), graphAction,
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse response) {
+                        if (graphContext != null) {
+                            if (response.getError() != null) {
+                                graphContext.error(getFacebookRequestErrorResponse(response.getError()));
+                            } else {
+                                graphContext.success(response.getJSONObject());
+                            }
+                            graphPath = null;
+                        }
                     }
-                    graphPath = null;
-                }
-            }
-        });
+                });
 
         Bundle params = graphRequest.getParameters();
 
@@ -840,14 +843,13 @@ public class ConnectPlugin extends CordovaPlugin {
      * Checks for publish permissions
      */
     private boolean isPublishPermission(String permission) {
-        return permission != null &&
-                (permission.startsWith(PUBLISH_PERMISSION_PREFIX) ||
-                permission.startsWith(MANAGE_PERMISSION_PREFIX) ||
-                OTHER_PUBLISH_PERMISSIONS.contains(permission));
+        return permission != null && (permission.startsWith(PUBLISH_PERMISSION_PREFIX)
+                || permission.startsWith(MANAGE_PERMISSION_PREFIX) || OTHER_PUBLISH_PERMISSIONS.contains(permission));
     }
 
     /**
      * Create a Facebook Response object that matches the one for the Javascript SDK
+     * 
      * @return JSONObject - the response object
      */
     public JSONObject getResponse() {
@@ -856,20 +858,12 @@ public class ConnectPlugin extends CordovaPlugin {
         if (hasAccessToken()) {
             Date today = new Date();
             long expiresTimeInterval = (accessToken.getExpires().getTime() - today.getTime()) / 1000L;
-            response = "{"
-                + "\"status\": \"connected\","
-                + "\"authResponse\": {"
-                + "\"accessToken\": \"" + accessToken.getToken() + "\","
-                + "\"expiresIn\": \"" + Math.max(expiresTimeInterval, 0) + "\","
-                + "\"session_key\": true,"
-                + "\"sig\": \"...\","
-                + "\"userID\": \"" + accessToken.getUserId() + "\""
-                + "}"
-                + "}";
+            response = "{" + "\"status\": \"connected\"," + "\"authResponse\": {" + "\"accessToken\": \""
+                    + accessToken.getToken() + "\"," + "\"expiresIn\": \"" + Math.max(expiresTimeInterval, 0) + "\","
+                    + "\"session_key\": true," + "\"sig\": \"...\"," + "\"userID\": \"" + accessToken.getUserId() + "\""
+                    + "}" + "}";
         } else {
-            response = "{"
-                + "\"status\": \"unknown\""
-                + "}";
+            response = "{" + "\"status\": \"unknown\"" + "}";
         }
         try {
             return new JSONObject(response);
@@ -881,10 +875,8 @@ public class ConnectPlugin extends CordovaPlugin {
 
     public JSONObject getFacebookRequestErrorResponse(FacebookRequestError error) {
 
-        String response = "{"
-            + "\"errorCode\": \"" + error.getErrorCode() + "\","
-            + "\"errorType\": \"" + error.getErrorType() + "\","
-            + "\"errorMessage\": \"" + error.getErrorMessage() + "\"";
+        String response = "{" + "\"errorCode\": \"" + error.getErrorCode() + "\"," + "\"errorType\": \""
+                + error.getErrorType() + "\"," + "\"errorMessage\": \"" + error.getErrorMessage() + "\"";
 
         if (error.getErrorUserMessage() != null) {
             response += ",\"errorUserMessage\": \"" + error.getErrorUserMessage() + "\"";
@@ -937,14 +929,14 @@ public class ConnectPlugin extends CordovaPlugin {
     /**
      * Wraps the given object if necessary.
      *
-     * If the object is null or , returns {@link #JSONObject.NULL}.
-     * If the object is a {@code JSONArray} or {@code JSONObject}, no wrapping is necessary.
-     * If the object is {@code JSONObject.NULL}, no wrapping is necessary.
-     * If the object is an array or {@code Collection}, returns an equivalent {@code JSONArray}.
-     * If the object is a {@code Map}, returns an equivalent {@code JSONObject}.
-     * If the object is a primitive wrapper type or {@code String}, returns the object.
-     * Otherwise if the object is from a {@code java} package, returns the result of {@code toString}.
-     * If wrapping fails, returns null.
+     * If the object is null or , returns {@link #JSONObject.NULL}. If the object is
+     * a {@code JSONArray} or {@code JSONObject}, no wrapping is necessary. If the
+     * object is {@code JSONObject.NULL}, no wrapping is necessary. If the object is
+     * an array or {@code Collection}, returns an equivalent {@code JSONArray}. If
+     * the object is a {@code Map}, returns an equivalent {@code JSONObject}. If the
+     * object is a primitive wrapper type or {@code String}, returns the object.
+     * Otherwise if the object is from a {@code java} package, returns the result of
+     * {@code toString}. If wrapping fails, returns null.
      */
     private static Object wrapObject(Object o) {
         if (o == null) {
@@ -965,15 +957,9 @@ public class ConnectPlugin extends CordovaPlugin {
             if (o instanceof Map) {
                 return new JSONObject((Map) o);
             }
-            if (o instanceof Boolean ||
-                o instanceof Byte ||
-                o instanceof Character ||
-                o instanceof Double ||
-                o instanceof Float ||
-                o instanceof Integer ||
-                o instanceof Long ||
-                o instanceof Short ||
-                o instanceof String) {
+            if (o instanceof Boolean || o instanceof Byte || o instanceof Character || o instanceof Double
+                    || o instanceof Float || o instanceof Integer || o instanceof Long || o instanceof Short
+                    || o instanceof String) {
                 return o;
             }
             if (o.getClass().getPackage().getName().startsWith("java.")) {
