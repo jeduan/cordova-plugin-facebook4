@@ -68,6 +68,6 @@ exports.getDeferredApplink = function(s, f) {
   exec(s, f, "FacebookConnectPlugin", "getDeferredApplink", []);
 };
 
-exports.setAutoLogAppEventsEnabled = function(s, f) {
-  exec(s, f, "FacebookConnectPlugin", "setAutoLogAppEventsEnabled", []);
+exports.setAutoLogAppEventsEnabled = function(flag, s, f) {
+  exec(s, f, "FacebookConnectPlugin", "setAutoLogAppEventsEnabled", [flag]);
 };
