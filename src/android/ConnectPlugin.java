@@ -351,7 +351,9 @@ public class ConnectPlugin extends CordovaPlugin {
             callbackContext.error("Invalid arguments");
         }
 
-        FacebookSdk.setAutoLogAppEventsEnabled(flag);
+        if (flag != null) {
+            FacebookSdk.setAutoLogAppEventsEnabled(flag);
+        }
         callbackContext.success();
     }
 
