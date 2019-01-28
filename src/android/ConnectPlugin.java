@@ -311,8 +311,8 @@ public class ConnectPlugin extends CordovaPlugin {
             });
 
             return true;
-        } else if (action.equals("setAdvertiserIDCollectionEnabled")) {
-            executeSetAdvertiserIDCollectionEnabled(args, callbackContext);
+        } else if (action.equals("setAutoLogAppEventsEnabled")) {
+            executeSetAutoLogAppEventsEnabled(args, callbackContext);
             return true;
         }
         return false;
@@ -336,7 +336,7 @@ public class ConnectPlugin extends CordovaPlugin {
                 });
     }
 
-    private void executeSetAdvertiserIDCollectionEnabled(JSONArray args, final CallbackContext callbackContext) {
+    private void executeSetAutoLogAppEventsEnabled(JSONArray args, final CallbackContext callbackContext) {
         if (args.length() != 1) {
             // We expect a single boolean parameter
             callbackContext.error("Invalid arguments");
@@ -347,11 +347,11 @@ public class ConnectPlugin extends CordovaPlugin {
         try {
             flag = args.getBoolean(0);
         } catch (JSONException e) {
-            Log.w(TAG, "Non-boolean method parameter provided to executeSetAdvertiserIDCollectionEnabled");
+            Log.w(TAG, "Non-boolean method parameter provided to executeSetAutoLogAppEventsEnabled");
             callbackContext.error("Invalid arguments");
         }
 
-        FacebookSdk.setAdvertiserIDCollectionEnabled(flag);
+        FacebookSdk.setAutoLogAppEventsEnabled(flag);
         callbackContext.success();
     }
 
