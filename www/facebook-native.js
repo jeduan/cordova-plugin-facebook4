@@ -41,6 +41,14 @@ exports.logout = function logout (s, f) {
   exec(s, f, 'FacebookConnectPlugin', 'logout', [])
 }
 
+exports.setUserID = function setUserID (id, s, f){
+  exec(s, f, 'FacebookConnectPlugin', 'setUserID', [id])
+}
+
+exports.updateUserProperties = function updateUserProperties (params, s, f){
+  exec(s, f, 'FacebookConnectPlugin', 'updateUserProperties', [params])
+}
+
 exports.api = function api (graphPath, permissions, s, f) {
   permissions = permissions || []
   exec(s, f, 'FacebookConnectPlugin', 'graphApi', [graphPath, permissions])

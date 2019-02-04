@@ -127,6 +127,30 @@ exports.logout = function logout (s, f) {
   })
 }
 
+exports.setUserID = function setUserID (id, s, f){
+  if (!__fbSdkReady) {
+    return __fbCallbacks.push(function() {
+      updateUserProperties(params);
+    });
+  }
+
+  FB.AppEvents.setUserID(params);
+
+  if(s) s();
+}
+
+exports.updateUserProperties = function (params, s, f){
+  if (!__fbSdkReady) {
+    return __fbCallbacks.push(function() {
+      updateUserProperties(params);
+    });
+  }
+
+  FB.AppEvents.updateUserProperties(params);
+
+  if(s) s();
+}
+
 exports.api = function api (graphPath, permissions, s, f) {
   if (!__fbSdkReady) {
     return __fbCallbacks.push(function() {
