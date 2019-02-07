@@ -13,10 +13,17 @@ var getPreferenceValue = function(config, name) {
 }
 
 if(process.argv.join("|").indexOf("APP_ID=") > -1) {
-	var APP_ID = process.argv.join("|").match(/APP_ID=(.*?)(\||$)/)[1]
+    var APP_ID = process.argv.join("|").match(/APP_ID=(.*?)(\||$)/)[1]
 } else {
-	var config = fs.readFileSync("config.xml").toString()
-	var APP_ID = getPreferenceValue(config, "APP_ID")
+    var config = fs.readFileSync("config.xml").toString()
+    var APP_ID = getPreferenceValue(config, "APP_ID")
+}
+
+if(process.argv.join("|").indexOf("FACEBOOK_BROWSER_SDK_VERSION=") > -1) {
+    var FACEBOOK_BROWSER_SDK_VERSION = process.argv.join("|").match(/FACEBOOK_BROWSER_SDK_VERSION=(.*?)(\||$)/)[1]
+} else {
+    var config = fs.readFileSync("config.xml").toString()
+    var FACEBOOK_BROWSER_SDK_VERSION = getPreferenceValue(config, "FACEBOOK_BROWSER_SDK_VERSION")
 }
 
 var files = [
@@ -28,7 +35,11 @@ var files = [
 
 for(var i in files) {
     try {
-    	var contents = fs.readFileSync(files[i]).toString()
-	    fs.writeFileSync(files[i], contents.replace(/APP_ID/g, APP_ID))
-	} catch(err) {}
+        var contents = fs.readFileSync(files[i]).toString()
+
+        contents = contents.replace(/APP_ID/g, APP_ID)
+        contents = contents.replace(/FACEBOOK_BROWSER_SDK_VERSION/g, FACEBOOK_BROWSER_SDK_VERSION)
+
+        fs.writeFileSync(files[i], contents)
+    } catch(err) {}
 }

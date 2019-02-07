@@ -26,6 +26,10 @@ $ cordova platform add browser
 $ cordova plugin add cordova-plugin-facebook4 --save --variable APP_ID="123456789" --variable APP_NAME="myApplication"
 ```
 
+## Change Facebook JavaScript SDK version defaults to v3.2
+$ cordova plugin add cordova-plugin-facebook4 --save --variable APP_ID="123456789" --variable APP_NAME="myApplication" --variable FACEBOOK_BROWSER_SDK_VERSION="X.YY.Z"
+```
+
 ## Setup
 
 - In your facebook develop website settings page, add your server's domain to app domain (or localhost for testing).
