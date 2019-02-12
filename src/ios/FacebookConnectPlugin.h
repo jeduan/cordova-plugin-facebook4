@@ -28,4 +28,6 @@
 - (void)showDialog:(CDVInvokedUrlCommand *)command;
 - (void)getDeferredApplink:(CDVInvokedUrlCommand *) command;
 - (void)activateApp:(CDVInvokedUrlCommand *)command;
+- (void)setUserID:(CDVInvokedUrlCommand *)command;
+- (void)updateUserProperties:(CDVInvokedUrlCommand *)command;
 @end
