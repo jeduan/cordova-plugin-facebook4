@@ -38,7 +38,7 @@ for(var i in files) {
         var contents = fs.readFileSync(files[i]).toString()
 
         contents = contents.replace(/APP_ID/g, APP_ID)
-        contents = contents.replace(/FACEBOOK_BROWSER_SDK_VERSION/g, FACEBOOK_BROWSER_SDK_VERSION)
+        contents = contents.replace(/FACEBOOK_BROWSER_SDK_VERSION/g, "'" + FACEBOOK_BROWSER_SDK_VERSION + "'")
 
         fs.writeFileSync(files[i], contents)
     } catch(err) {}
