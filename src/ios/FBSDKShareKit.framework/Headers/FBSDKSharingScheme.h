@@ -16,16 +16,18 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#import <UIKit/UIKit.h>
+#import "FBSDKShareDialogMode.h"
 
-#define FBSDK_MESSENGER_SHARE_KIT_VERSION @"1.3.2"
+/**
+ A base interface for indicating a custom URL scheme
+ */
+@protocol FBSDKSharingScheme
 
-#import "FBSDKMessengerContext.h"
-#import "FBSDKMessengerSharer.h"
-#import "FBSDKMessengerURLHandler.h"
-#import "FBSDKMessengerURLHandlerReplyContext.h"
-#import "FBSDKMessengerURLHandlerOpenFromComposerContext.h"
-#import "FBSDKMessengerButton.h"
-#import "FBSDKMessengerURLHandlerCancelContext.h"
-#import "FBSDKMessengerShareOptions.h"
-#import "FBSDKMessengerBroadcastContext.h"
+/**
+ Asks the receiver to provide a custom scheme.
+ - Parameter mode: The intended dialog mode for sharing the content.
+ - Returns: A custom URL scheme to use for the specified mode, or nil.
+ */
+- (nullable NSString *)schemeForMode:(FBSDKShareDialogMode)mode;
+
+@end

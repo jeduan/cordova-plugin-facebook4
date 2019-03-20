@@ -18,35 +18,45 @@
 
 #import <Foundation/Foundation.h>
 
-#import "FBSDKMessengerContext.h"
+NS_ASSUME_NONNULL_BEGIN
 
-/**
-
-  This object represents a user tapping reply from a message in Messenger. Passing
- this context into a share method will trigger the reply flow
+/*!
+ @abstract Describes the initial response when starting the device login flow.
+ @discussion This is used by `FBSDKDeviceLoginManager`.
  */
-@interface FBSDKMessengerURLHandlerReplyContext : FBSDKMessengerContext
+@interface FBSDKDeviceLoginCodeInfo : NSObject
 
-/**
-  Additional information that was passed along with the original media that was replied to
-
- 
-
- If content shared to Messenger incuded metadata and the user replied to that message,
- that metadata is passed along with the reply back to the app. If no metadata was included
- this is nil
+/*!
+ @abstract There is no public initializer.
  */
-@property (nonatomic, copy, readonly) NSString *metadata;
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
-/**
-  The user IDs of the other participants on the thread.
+/*!
+ @abstract the unique id for this login flow.
+*/
+@property (nonatomic, copy, readonly) NSString *identifier;
 
- 
+/*!
+ @abstract the short "user_code" that should be presented to the user.
+*/
+@property (nonatomic, copy, readonly) NSString *loginCode;
 
- User IDs can be used with the Facebook SDK and Graph API (https://developers.facebook.com/docs/graph-api)
- to query names, photos, and other data. This will only contain IDs of users that
- have also logged into your app via their Facebook account.
- */
-@property (nonatomic, copy, readonly) NSSet *userIDs;
+/*!
+ @abstract the verification URL.
+*/
+@property (nonatomic, copy, readonly) NSURL *verificationURL;
+
+/*!
+ @abstract the expiration date.
+*/
+@property (nonatomic, copy, readonly) NSDate *expirationDate;
+
+/*!
+ @abstract the polling interval
+*/
+@property (nonatomic, assign, readonly) NSUInteger pollingInterval;
 
 @end
+
+NS_ASSUME_NONNULL_END
