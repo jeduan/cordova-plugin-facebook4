@@ -786,26 +786,35 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
 
 + (void)load
 {
+    // ios < 9
     FBMethodSwizzle([self class], @selector(application:openURL:sourceApplication:annotation:));
+    
+    // ios >= 9
+    FBMethodSwizzle([self class], @selector(application:openURL:options:));
 }
 
 // This method is a duplicate of the other openURL method below, except using the newer iOS (9) API.
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
+- (BOOL)noop_application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
+    return NO;
+}
+
+- (BOOL)swizzled_application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
     if (!url) {
         return NO;
     }
     // Required by FBSDKCoreKit for deep linking/to complete login
     [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
-    
+
     // NOTE: Cordova will run a JavaScript method here named handleOpenURL. This functionality is deprecated
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
-    NSLog(@"FB handle url: %@", url);
+    NSLog(@"FB handle url (ios>9): %@", url);
 
     // Call existing method
-    return [self swizzled_application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
+    return [self swizzled_application:application openURL:url options:options];
 }
 
+// iOS < 9
 - (BOOL)noop_application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     return NO;
