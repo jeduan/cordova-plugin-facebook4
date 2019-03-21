@@ -156,7 +156,7 @@ if (window.location.protocol === "file:") {
     FB.init({
       appId      : APP_ID,  // APP_ID is populated by the cordova after_prepare hook
       xfbml      : true,
-      version    : 'v2.7'
+      version    : 'v3.2'
     });
 
     __fbSdkReady = true;
@@ -170,7 +170,7 @@ if (window.location.protocol === "file:") {
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) {return;}
       js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
 }
