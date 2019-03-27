@@ -18,9 +18,36 @@
 
 #import <Foundation/Foundation.h>
 
-/**
+#import <FBSDKShareKit/FBSDKCameraEffectArguments.h>
+#import <FBSDKShareKit/FBSDKCameraEffectTextures.h>
+#import <FBSDKShareKit/FBSDKSharingContent.h>
+#import <FBSDKShareKit/FBSDKSharingScheme.h>
 
-  This represents the way that content is shared between Messenger and partner apps.
+/**
+ A model for content to share with a Facebook camera effect.
  */
-@interface FBSDKMessengerContext : NSObject <NSSecureCoding>
+@interface FBSDKShareCameraEffectContent : NSObject <FBSDKSharingContent, FBSDKSharingScheme>
+
+/**
+ ID of the camera effect to use.
+ */
+@property (nonatomic, copy) NSString *effectID;
+
+/**
+ Arguments for the effect.
+ */
+@property (nonatomic, copy) FBSDKCameraEffectArguments *effectArguments;
+
+/**
+ Textures for the effect.
+ */
+@property (nonatomic, copy) FBSDKCameraEffectTextures *effectTextures;
+
+/**
+ Compares the receiver to another camera effect content.
+ @param content The other content
+ @return YES if the receiver's values are equal to the other content's values; otherwise NO
+ */
+- (BOOL)isEqualToShareCameraEffectContent:(FBSDKShareCameraEffectContent *)content;
+
 @end

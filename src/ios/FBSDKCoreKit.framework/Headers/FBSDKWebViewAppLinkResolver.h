@@ -16,14 +16,23 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-#import "FBSDKMessengerContext.h"
+#import "FBSDKAppLinkResolving.h"
 
-/**
+NS_ASSUME_NONNULL_BEGIN
 
-  This object represents a user canceling out of a share flow in Messenger
+/*!
+ A reference implementation for an App Link resolver that uses a hidden UIWebView
+ to parse the HTML containing App Link metadata.
  */
-@interface FBSDKMessengerURLHandlerCancelContext : FBSDKMessengerContext
+@interface FBSDKWebViewAppLinkResolver : NSObject <FBSDKAppLinkResolving>
+
+/*!
+ Gets the instance of a FBSDKWebViewAppLinkResolver.
+ */
++ (instancetype)sharedInstance;
 
 @end
+
+NS_ASSUME_NONNULL_END

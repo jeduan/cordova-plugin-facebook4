@@ -19,6 +19,7 @@
 #import <Foundation/Foundation.h>
 
 #import <FBSDKCoreKit/FBSDKCopying.h>
+#import <FBSDKShareKit/FBSDKSharingValidation.h>
 
 /**
  NS_ENUM(NSUInteger, FBSDKGameRequestActionType)
@@ -53,7 +54,7 @@ typedef NS_ENUM(NSUInteger, FBSDKGameRequestFilter)
 /**
   A model for a game request.
  */
-@interface FBSDKGameRequestContent : NSObject <FBSDKCopying, NSSecureCoding>
+@interface FBSDKGameRequestContent : NSObject <FBSDKCopying, FBSDKSharingValidation, NSSecureCoding>
 
 /**
   Used when defining additional context about the nature of the request.
@@ -67,8 +68,8 @@ typedef NS_ENUM(NSUInteger, FBSDKGameRequestFilter)
 
 /**
   Compares the receiver to another game request content.
- - Parameter content: The other content
- - Returns: YES if the receiver's values are equal to the other content's values; otherwise NO
+ @param content The other content
+ @return YES if the receiver's values are equal to the other content's values; otherwise NO
  */
 - (BOOL)isEqualToGameRequestContent:(FBSDKGameRequestContent *)content;
 
@@ -121,9 +122,10 @@ typedef NS_ENUM(NSUInteger, FBSDKGameRequestFilter)
 
 /**
 
-- Warning:Use `recipientSuggestions` instead.
+@warning Use `recipientSuggestions` instead.
 */
-@property (nonatomic, copy) NSArray *suggestions __attribute__ ((deprecated("use recipientSuggestions instead")));
+@property (nonatomic, copy) NSArray *suggestions
+DEPRECATED_MSG_ATTRIBUTE("use recipientSuggestions instead");
 
 /**
   The title for the dialog.
@@ -132,8 +134,9 @@ typedef NS_ENUM(NSUInteger, FBSDKGameRequestFilter)
 
 /**
 
-- Warning:Use `recipients` instead.
+@warning Use `recipients` instead.
  */
-@property (nonatomic, copy) NSArray *to __attribute__ ((deprecated("use recipients instead")));
+@property (nonatomic, copy) NSArray *to
+DEPRECATED_MSG_ATTRIBUTE("use recipients instead");
 
 @end

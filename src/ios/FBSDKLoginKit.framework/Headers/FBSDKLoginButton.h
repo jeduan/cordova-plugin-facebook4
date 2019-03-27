@@ -106,25 +106,25 @@ typedef NS_ENUM(NSUInteger, FBSDKLoginButtonTooltipBehavior)
 @required
 /**
   Sent to the delegate when the button was used to login.
- - Parameter loginButton: the sender
- - Parameter result: The results of the login
- - Parameter error: The error (if any) from the login
+ @param loginButton the sender
+ @param result The results of the login
+ @param error The error (if any) from the login
  */
-- (void)  loginButton:(FBSDKLoginButton *)loginButton
+- (void)loginButton:(FBSDKLoginButton *)loginButton
 didCompleteWithResult:(FBSDKLoginManagerLoginResult *)result
                 error:(NSError *)error;
 
 /**
   Sent to the delegate when the button was used to logout.
- - Parameter loginButton: The button that was clicked.
+ @param loginButton The button that was clicked.
 */
 - (void)loginButtonDidLogOut:(FBSDKLoginButton *)loginButton;
 
 @optional
 /**
   Sent to the delegate when the button is about to login.
- - Parameter loginButton: the sender
- - Returns: YES if the login should be allowed to proceed, NO otherwise
+ @param loginButton the sender
+ @return YES if the login should be allowed to proceed, NO otherwise
  */
 - (BOOL) loginButtonWillLogin:(FBSDKLoginButton *)loginButton;
 

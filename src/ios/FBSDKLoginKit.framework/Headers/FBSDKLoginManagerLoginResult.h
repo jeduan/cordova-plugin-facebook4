@@ -25,6 +25,9 @@
  */
 @interface FBSDKLoginManagerLoginResult : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
 /**
   the access token.
  */
@@ -51,10 +54,10 @@
 
 /**
   Initializes a new instance.
- - Parameter token: the access token
- - Parameter isCancelled: whether the login was cancelled by the user
- - Parameter grantedPermissions: the set of granted permissions
- - Parameter declinedPermissions: the set of declined permissions
+ @param token the access token
+ @param isCancelled whether the login was cancelled by the user
+ @param grantedPermissions the set of granted permissions
+ @param declinedPermissions the set of declined permissions
  */
 - (instancetype)initWithToken:(FBSDKAccessToken *)token
                   isCancelled:(BOOL)isCancelled

@@ -18,8 +18,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import <FBSDKCoreKit/FBSDKMacros.h>
-
 @class FBSDKGraphRequest;
 @class FBSDKGraphRequestConnection;
 
@@ -34,13 +32,13 @@
  Pass a block of this type when calling addRequest.  This will be called once
  the request completes.  The call occurs on the UI thread.
 
- - Parameter connection:      The `FBSDKGraphRequestConnection` that sent the request.
+ @param connection      The `FBSDKGraphRequestConnection` that sent the request.
 
- - Parameter result:          The result of the request.  This is a translation of
+ @param result          The result of the request.  This is a translation of
  JSON data to `NSDictionary` and `NSArray` objects.  This
  is nil if there was an error.
 
- - Parameter error:           The `NSError` representing any error that occurred.
+ @param error           The `NSError` representing any error that occurred.
 
  */
 typedef void (^FBSDKGraphRequestHandler)(FBSDKGraphRequestConnection *connection,
@@ -68,7 +66,7 @@ typedef void (^FBSDKGraphRequestHandler)(FBSDKGraphRequestConnection *connection
  start, the object returned from the convenience method has already begun loading and this method
  will not be called when the delegate is set.
 
- - Parameter connection:    The request connection that is starting a network request
+ @param connection    The request connection that is starting a network request
  */
 - (void)requestConnectionWillBeginLoading:(FBSDKGraphRequestConnection *)connection;
 
@@ -86,7 +84,7 @@ typedef void (^FBSDKGraphRequestHandler)(FBSDKGraphRequestConnection *connection
 
  This method is invoked after the completion handler for each <FBSDKGraphRequest>.
 
- - Parameter connection:    The request connection that successfully completed a network request
+ @param connection    The request connection that successfully completed a network request
  */
 - (void)requestConnectionDidFinishLoading:(FBSDKGraphRequestConnection *)connection;
 
@@ -101,8 +99,8 @@ typedef void (^FBSDKGraphRequestHandler)(FBSDKGraphRequestConnection *connection
  argument specifies why the network connection failed. The `NSError` object passed to the
  FBSDKGraphRequestHandler block may contain additional information.
 
- - Parameter connection:    The request connection that successfully completed a network request
- - Parameter error:         The `NSError` representing the network error that occurred, if any. May be nil
+ @param connection    The request connection that successfully completed a network request
+ @param error         The `NSError` representing the network error that occurred, if any. May be nil
  in some circumstances. Consult the `NSError` for the <FBSDKGraphRequest> for reliable
  failure information.
  */
@@ -118,12 +116,12 @@ typedef void (^FBSDKGraphRequestHandler)(FBSDKGraphRequestConnection *connection
 
  The byte count arguments refer to the aggregated <FBSDKGraphRequest> objects, not a particular <FBSDKGraphRequest>.
 
- Like `NSURLConnection`, the values may change in unexpected ways if data needs to be resent.
+ Like `NSURLSession`, the values may change in unexpected ways if data needs to be resent.
 
- - Parameter connection:                The request connection transmitting data to a remote host
- - Parameter bytesWritten:              The number of bytes sent in the last transmission
- - Parameter totalBytesWritten:         The total number of bytes sent to the remote host
- - Parameter totalBytesExpectedToWrite: The total number of bytes expected to send to the remote host
+ @param connection                The request connection transmitting data to a remote host
+ @param bytesWritten              The number of bytes sent in the last transmission
+ @param totalBytesWritten         The total number of bytes sent to the remote host
+ @param totalBytesExpectedToWrite The total number of bytes expected to send to the remote host
  */
 - (void)requestConnection:(FBSDKGraphRequestConnection *)connection
           didSendBodyData:(NSInteger)bytesWritten
@@ -153,7 +151,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
 /**
   Gets or sets the timeout interval to wait for a response before giving up.
  */
-@property (nonatomic) NSTimeInterval timeout;
+@property (nonatomic, assign) NSTimeInterval timeout;
 
 /**
   The raw response that was returned from the server.  (readonly)
@@ -177,7 +175,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
 
   This method sets the default timeout on all FBSDKGraphRequestConnection instances. Defaults to 60 seconds.
 
- - Parameter defaultConnectionTimeout:     The timeout interval.
+ @param defaultConnectionTimeout     The timeout interval.
  */
 + (void)setDefaultConnectionTimeout:(NSTimeInterval)defaultConnectionTimeout;
 
@@ -190,8 +188,8 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
 
   This method adds an <FBSDKGraphRequest> object to this connection.
 
- - Parameter request:       A request to be included in the round-trip when start is called.
- - Parameter handler:       A handler to call back when the round-trip completes or times out.
+ @param request       A request to be included in the round-trip when start is called.
+ @param handler       A handler to call back when the round-trip completes or times out.
 
 
 
@@ -206,12 +204,12 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
 
   This method adds an <FBSDKGraphRequest> object to this connection.
 
- - Parameter request:         A request to be included in the round-trip when start is called.
+ @param request         A request to be included in the round-trip when start is called.
 
- - Parameter handler:         A handler to call back when the round-trip completes or times out.
+ @param handler         A handler to call back when the round-trip completes or times out.
  The handler will be invoked on the main thread.
 
- - Parameter name:            An optional name for this request.  This can be used to feed
+ @param name            An optional name for this request.  This can be used to feed
  the results of one request to the input of another <FBSDKGraphRequest> in the same
  `FBSDKGraphRequestConnection` as described in
  [Graph API Batch Requests]( https://developers.facebook.com/docs/reference/api/batch/ ).
@@ -223,19 +221,24 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
  to allow for using the request's response in a subsequent request.
  */
 - (void)addRequest:(FBSDKGraphRequest *)request
+    batchEntryName:(NSString *)name
+ completionHandler:(FBSDKGraphRequestHandler)handler;
+
+- (void)addRequest:(FBSDKGraphRequest *)request
  completionHandler:(FBSDKGraphRequestHandler)handler
-    batchEntryName:(NSString *)name;
+    batchEntryName:(NSString *)name
+DEPRECATED_MSG_ATTRIBUTE("Renamed `addRequest:batchEntryName:completionHandler:`");
 
 /**
  @method
 
   This method adds an <FBSDKGraphRequest> object to this connection.
 
- - Parameter request:         A request to be included in the round-trip when start is called.
+ @param request         A request to be included in the round-trip when start is called.
 
- - Parameter handler:         A handler to call back when the round-trip completes or times out.
+ @param handler         A handler to call back when the round-trip completes or times out.
 
- - Parameter batchParameters: The optional dictionary of parameters to include for this request
+ @param batchParameters The optional dictionary of parameters to include for this request
  as described in [Graph API Batch Requests]( https://developers.facebook.com/docs/reference/api/batch/ ).
  Examples include "depends_on", "name", or "omit_response_on_success".
 
@@ -246,8 +249,13 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
  to allow for using the request's response in a subsequent request.
  */
 - (void)addRequest:(FBSDKGraphRequest *)request
+   batchParameters:(NSDictionary<NSString *, id> *)batchParameters
+ completionHandler:(FBSDKGraphRequestHandler)handler;
+
+- (void)addRequest:(FBSDKGraphRequest *)request
  completionHandler:(FBSDKGraphRequestHandler)handler
-   batchParameters:(NSDictionary *)batchParameters;
+   batchParameters:(NSDictionary *)batchParameters
+DEPRECATED_MSG_ATTRIBUTE("Renamed `addRequest:batchParameters:completionHandler:`");
 
 /**
  @methodgroup Instance methods
@@ -285,12 +293,10 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
 
 /**
   Determines the operation queue that is used to call methods on the connection's delegate.
- - Parameter queue: The operation queue to use when calling delegate methods.
+ @param queue The operation queue to use when calling delegate methods.
 
  By default, a connection is scheduled on the current thread in the default mode when it is created.
  You cannot reschedule a connection after it has started.
-
- This is very similar to `[NSURLConnection setDelegateQueue:]`.
  */
 - (void)setDelegateQueue:(NSOperationQueue *)queue;
 
@@ -305,9 +311,12 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
  for applications. If you want to override the version part while using batch requests on the connection, call
  this method to set the version for the batch request.
 
- - Parameter version:   This is a string in the form @"v2.0" which will be used for the version part of an API path
+ @param version   This is a string in the form @"v2.0" which will be used for the version part of an API path
  */
-- (void)overrideVersionPartWith:(NSString *)version;
+- (void)overrideGraphAPIVersion:(NSString *)version;
+
+- (void)overrideVersionPartWith:(NSString *)version
+DEPRECATED_MSG_ATTRIBUTE("Renamed `overrideGraphAPIVersion`");
 
 @end
 
@@ -320,4 +329,4 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
  will be wrapped into a dictionary using this const as the key. This only applies for very few Graph API
  prior to v2.1.
  */
-FBSDK_EXTERN NSString *const FBSDKNonJSONResponseProperty;
+FOUNDATION_EXPORT NSString *const FBSDKNonJSONResponseProperty;
