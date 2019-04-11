@@ -108,7 +108,7 @@
             <string>$APP_NAME</string>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="FacebookUrlSchemeSuffix" mode="add">
+        <config-file target="*-Info.plist" parent="FacebookUrlSchemeSuffix">
             <string>$URL_SUFFIX</string>
         </config-file>
 
