@@ -19,6 +19,7 @@
 
     <preference name="APP_ID" />
     <preference name="APP_NAME" />
+    <preference name="URL_SUFFIX" default="" />
     <preference name="FACEBOOK_HYBRID_APP_EVENTS" default="false" />
     <preference name="FACEBOOK_ANDROID_SDK_VERSION" default="4.40.0"/>
 
@@ -107,6 +108,10 @@
             <string>$APP_NAME</string>
         </config-file>
 
+        <config-file target="*-Info.plist" parent="FacebookUrlSchemeSuffix">
+            <string>$URL_SUFFIX</string>
+        </config-file>
+
         <config-file target="*-Info.plist" parent="FacebookHybridAppEvents">
             <string>$FACEBOOK_HYBRID_APP_EVENTS</string>
         </config-file>
@@ -116,7 +121,7 @@
             <dict>
               <key>CFBundleURLSchemes</key>
               <array>
-                <string>fb$APP_ID</string>
+                <string>fb$APP_ID$URL_SUFFIX</string>
               </array>
             </dict>
           </array>
