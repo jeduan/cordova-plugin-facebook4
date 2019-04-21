@@ -284,7 +284,7 @@ public class ConnectPlugin extends CordovaPlugin {
                 callbackContext.error("Invalid arguments");
                 return true;
             }
-            BigDecimal value = new BigDecimal(args.getString(0));
+            BigDecimal value = new BigDecimal(Double.parseDouble(args.getString(0)));
             String currency = args.getString(1);
             logger.logPurchase(value, Currency.getInstance(currency));
             callbackContext.success();
