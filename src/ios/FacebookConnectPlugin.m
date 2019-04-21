@@ -280,7 +280,19 @@
         content.contentURL = [NSURL URLWithString:[params objectForKey:@"link"]];
 
         self.dialogCallbackId = command.callbackId;
-        [FBSDKMessageDialog showWithContent:content delegate:self];
+        
+        FBSDKMessageDialog *messageDialog = [[FBSDKMessageDialog alloc] init];
+        messageDialog.delegate = self;
+        [messageDialog setShareContent:content];
+
+        if ([messageDialog canShow])
+        {
+            [messageDialog show];
+            return;
+        }
+
+        // Messenger isn't installed. Redirect the person to the App Store.
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/en/app/facebook-messenger/id454638411?mt=8"]];
         return;
 
     } else if ([method isEqualToString:@"share"] || [method isEqualToString:@"feed"]) {
