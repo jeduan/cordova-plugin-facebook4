@@ -25,8 +25,9 @@
     <engines>
         <!-- Requires > 3.5.0 because of the custom Framework tag for iOS [CB-6698] -->
         <!-- Requires > 4.0.0 because of the Framework tag for Android that uses gradle -->
-        <engine name="cordova-android" version=">=3.5.0" />
-        <engine name="cordova-ios" version=">=3.5.0" />
+        <engine name="cordova" version=">=7.0.0" />
+        <engine name="cordova-android" version=">=6.3.0" />
+        <engine name="cordova-ios" version=">=4.4.0" />
     </engines>
 
     <!-- android -->
@@ -161,12 +162,12 @@
         </config-file>
 
         <!-- Bolts framework -->
-        <framework src="src/ios/Bolts.framework" custom="true" />
+        <framework src="Bolts" type="podspec" spec="1.9.0" />
 
         <!-- Facebook framework -->
-        <framework src="src/ios/FBSDKCoreKit.framework" custom="true" />
-        <framework src="src/ios/FBSDKLoginKit.framework" custom="true" />
-        <framework src="src/ios/FBSDKShareKit.framework" custom="true" />
+        <framework src="FBSDKCoreKit" type="podspec" spec="4.44.1" />
+        <framework src="FBSDKLoginKit" type="podspec" spec="4.44.1" />
+        <framework src="FBSDKShareKit" type="podspec" spec="4.44.1" />
 
     </platform>
 
