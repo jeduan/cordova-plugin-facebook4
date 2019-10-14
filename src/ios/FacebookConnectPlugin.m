@@ -521,23 +521,12 @@
         } else {
             readPermissionFound = YES;
         }
-
         // If we've found one of each we can stop looking.
         if (publishPermissionFound && readPermissionFound) {
             break;
         }
     }
-
-    if (publishPermissionFound && readPermissionFound) {
-        // Mix of permissions, not allowed
-        NSDictionary *userInfo = @{
-            FBSDKErrorLocalizedDescriptionKey: @"Cannot ask for both read and publish permissions.",
-        };
-        NSError *error = [NSError errorWithDomain:@"facebook" code:-1 userInfo:userInfo];
-        handler(nil, error);
-    } else {
-        [self.loginManager logInWithPermissions:permissions fromViewController:[self topMostController] handler:handler];
-    }
+    [self.loginManager logInWithPermissions:permissions fromViewController:[self topMostController] handler:handler];
 }
 
 - (UIViewController*) topMostController {
