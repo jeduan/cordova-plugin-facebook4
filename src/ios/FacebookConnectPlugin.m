@@ -484,8 +484,10 @@
 {
     [FBSDKAppLinkUtility fetchDeferredAppLink:^(NSURL *url, NSError *error) {
         if (error) {
-            // If the SDK has a message for the user, surface it.
-            NSString *errorMessage = error.userInfo[FBSDKErrorLocalizedDescriptionKey] ?: @"Received error while fetching deferred app link.";
+            // If the SDK has a message for the user, surface it. If not, put the localized description as 
+            // the error message. Else, put the default message.
+            NSString *errorMessage = error.userInfo[FBSDKErrorLocalizedDescriptionKey] ?: error.localizedDescription;
+            errorMessage = errorMessage ?: @"Received error while fetching deferred app link.";
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                               messageAsString:errorMessage];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
