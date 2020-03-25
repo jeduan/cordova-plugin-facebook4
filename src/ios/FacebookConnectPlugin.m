@@ -40,6 +40,10 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidBecomeActive:)
                                                  name:UIApplicationDidBecomeActiveNotification object:nil];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self 
+                                             selector:@selector(handleOpenURLWithAppSourceAndAnnotation:) 
+                                                 name:CDVPluginHandleOpenURLWithAppSourceAndAnnotationNotification object:nil];
 }
 
 - (void) applicationDidFinishLaunching:(NSNotification *) notification {
@@ -58,6 +62,13 @@
         self.applicationWasActivated = YES;
         [self enableHybridAppEvents];
     }
+}
+
+- (void) handleOpenURLWithAppSourceAndAnnotation:(NSNotification *) notification {
+    NSMutableDictionary * options = [notification object];
+    NSURL* url = options[@"url"];
+
+    [[FBSDKApplicationDelegate sharedInstance] application:[UIApplication sharedApplication] openURL:url options:options];
 }
 
 #pragma mark - Cordova commands
