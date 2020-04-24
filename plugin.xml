@@ -192,8 +192,9 @@
             <access origin="https://*.fbcdn.net" />
             <access origin="https://*.akamaihd.net" />
         </config-file>
+
+        <!-- after_prepare hook to populate APP_ID -->
+        <hook type="after_prepare" src="scripts/after_prepare.js" />
     </platform>
 
-    <!-- after_prepare hook to populate APP_ID -->
-    <hook type="after_prepare" src="scripts/after_prepare.js" />
 </plugin>
