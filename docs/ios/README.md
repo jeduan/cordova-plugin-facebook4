@@ -38,7 +38,7 @@ pod dependencies
 
 #### Error: pod: Command failed with exit code 31
 
-If you install the plugin and face the error `Failed to install 'cordova-plugin-facebook4': Error: pod: Command failed with exit code 31`, it probably means that your local Pod repo is not up-to-date. In order to solve the problem, prior the installation, run th following command in your platform to update your Pod repo:
+If you install the plugin and face the error `Failed to install 'cordova-plugin-facebook4': Error: pod: Command failed with exit code 31`, it probably means that your local Pod repo is not up-to-date. In order to solve the problem, prior the installation, run the following command in your platform to update your Pod repo:
 
 ```bash
 pod update
