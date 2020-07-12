@@ -155,6 +155,8 @@ Game request:
 		filters: 'app_non_users'
 	}
 
+Note: to have it working on `iOS` the `actionType` is required, see [issue#791](https://github.com/jeduan/cordova-plugin-facebook4/issues/791) for details.
+
 Send Dialog:
 
 	{
