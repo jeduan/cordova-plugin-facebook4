@@ -125,18 +125,26 @@
      While calls to logEvent can be made to register purchase events,
      there is a helper method that explicitly takes a currency indicator.
      */
-    CDVPluginResult *res;
-    if ([command.arguments count] != 2) {
-        res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
-        [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
-        return;
-    }
-    double value = [[command.arguments objectAtIndex:0] doubleValue];
-    NSString *currency = [command.arguments objectAtIndex:1];
-    [FBSDKAppEvents logPurchase:value currency:currency];
+     if ([command.arguments count] < 2 || [command.arguments count] > 3 ) {
+         CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
+         [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+         return;
+     }
 
-    res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-    [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+     [self.commandDelegate runInBackground:^{
+         double value       = [[command.arguments objectAtIndex:0] doubleValue];
+         NSString *currency = [command.arguments objectAtIndex:1];
+
+         if ([command.arguments count] == 2 ) {
+             [FBSDKAppEvents logPurchase:value currency:currency];
+         }else if ([command.arguments count] >= 3) {
+             NSDictionary *params = [command.arguments objectAtIndex:2];
+             [FBSDKAppEvents logPurchase:value currency:currency parameters:params];
+         }
+
+         CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+         [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+     }];
 }
 
 - (void)login:(CDVInvokedUrlCommand *)command {
@@ -214,8 +222,8 @@
     if ([command.arguments count] > 0) {
         permissions = command.arguments;
     }
-    
-    NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions; 
+
+    NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions;
 
     for (NSString *value in permissions) {
     	NSLog(@"Checking permission %@.", value);
@@ -226,7 +234,7 @@
             return;
         }
     }
-    
+
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
     												 messageAsString:@"All permissions have been accepted"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -790,7 +798,7 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
     }
     // Required by FBSDKCoreKit for deep linking/to complete login
     [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
-    
+
     // NOTE: Cordova will run a JavaScript method here named handleOpenURL. This functionality is deprecated
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
@@ -817,7 +825,7 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
     NSLog(@"FB handle url using application:openURL:sourceApplication:annotation: %@", url);
-    
+
     // Call existing method
     return [self swizzled_application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 }

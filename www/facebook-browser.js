@@ -78,7 +78,7 @@ exports.login = function login (permissions, s, f) {
       }
     } else { // In case that no response is available (e.g. popup dismissed)
       f('No response')
-    } 
+    }
   }, options)
 }
 
@@ -103,13 +103,13 @@ exports.logEvent = function logEvent (eventName, params, valueToSum, s, f) {
   if(s) s();
 }
 
-exports.logPurchase = function logPurchase (value, currency, s, f) {
+exports.logPurchase = function logPurchase (value, currency, params, s, f) {
   if (!__fbSdkReady) {
     return __fbCallbacks.push(function() {
-      logPurchase(value, currency, s, f);
+      logPurchase(value, currency, params, s, f);
     });
   }
-  
+
   FB.AppEvents.logPurchase(value, currency);
 
   if(s) s();

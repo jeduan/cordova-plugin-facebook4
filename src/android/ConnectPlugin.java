@@ -276,19 +276,8 @@ public class ConnectPlugin extends CordovaPlugin {
             return true;
 
         } else if (action.equals("logPurchase")) {
-            /*
-             * While calls to logEvent can be made to register purchase events,
-             * there is a helper method that explicitly takes a currency indicator.
-             */
-            if (args.length() != 2) {
-                callbackContext.error("Invalid arguments");
-                return true;
-            }
-            BigDecimal value = new BigDecimal(args.getString(0));
-            String currency = args.getString(1);
-            logger.logPurchase(value, Currency.getInstance(currency));
-            callbackContext.success();
-            return true;
+			executeLogPurchase(args, callbackContext);
+			return true;
 
         } else if (action.equals("showDialog")) {
             executeDialog(args, callbackContext);
@@ -636,6 +625,54 @@ public class ConnectPlugin extends CordovaPlugin {
             callbackContext.success();
         }
     }
+
+	private void executeLogPurchase(JSONArray args, CallbackContext callbackContext) throws JSONException {
+		/*
+		 * While calls to logEvent can be made to register purchase events,
+		 * there is a helper method that explicitly takes a currency indicator.
+		 */
+		if (args.length() < 2 || args.length() > 3) {
+			// Not enough parameters
+			callbackContext.error("Invalid arguments");
+			return;
+		}
+
+		BigDecimal value = new BigDecimal(args.getString(0));
+		String currency  = args.getString(1);
+
+		if (args.length() == 3 ) {
+
+			JSONObject params = args.getJSONObject(2);
+			Bundle parameters = new Bundle();
+			Iterator<String> iter = params.keys();
+
+			while (iter.hasNext()) {
+				String key = iter.next();
+				try {
+					// Try get a String
+					String valueParam = params.getString(key);
+					parameters.putString(key, valueParam);
+				} catch (JSONException e) {
+					// Maybe it was an int
+					Log.w(TAG, "Type in AppEvent parameters was not String for key: " + key);
+					try {
+						int valueParam = params.getInt(key);
+						parameters.putInt(key, valueParam);
+					} catch (JSONException e2) {
+						// Nope
+						Log.e(TAG, "Unsupported type in AppEvent parameters for key: " + key);
+					}
+				}
+			}
+
+			logger.logPurchase(value, Currency.getInstance(currency), parameters);
+		}else{
+			logger.logPurchase(value, Currency.getInstance(currency));
+		}
+
+
+		callbackContext.success();
+	}
 
     private void executeLogin(JSONArray args, CallbackContext callbackContext) throws JSONException {
         Log.d(TAG, "login FB");
