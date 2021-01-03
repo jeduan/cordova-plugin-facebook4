@@ -20,7 +20,7 @@
     <preference name="APP_ID" />
     <preference name="APP_NAME" />
     <preference name="FACEBOOK_HYBRID_APP_EVENTS" default="false" />
-    <preference name="FACEBOOK_ANDROID_SDK_VERSION" default="5.13.0"/>
+    <preference name="FACEBOOK_ANDROID_SDK_VERSION" default="8.1.0"/>
 
     <engines>
         <!-- Requires > 3.5.0 because of the custom Framework tag for iOS [CB-6698] -->
@@ -154,7 +154,8 @@
         <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
           <array>
             <string>fbapi</string>
-            <string>fb-messenger-api</string>
+            <string>fb-messenger-share-api</string>
+            <string>fbauth</string>
             <string>fbauth2</string>
             <string>fbshareextension</string>
           </array>
@@ -166,9 +167,9 @@
                 <source url="https://cdn.cocoapods.org/"/>
             </config>
             <pods use-frameworks="true">
-                <pod name="FBSDKCoreKit" spec="5.15.0"/>
-                <pod name="FBSDKLoginKit" spec="5.15.0"/>
-                <pod name="FBSDKShareKit" spec="5.15.0"/>
+                <pod name="FBSDKCoreKit" spec="8.2.0"/>
+                <pod name="FBSDKLoginKit" spec="8.2.0"/>
+                <pod name="FBSDKShareKit" spec="8.2.0"/>
             </pods>
         </podspec>
 

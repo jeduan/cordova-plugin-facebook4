@@ -280,7 +280,19 @@
         content.contentURL = [NSURL URLWithString:[params objectForKey:@"link"]];
 
         self.dialogCallbackId = command.callbackId;
-        [FBSDKMessageDialog showWithContent:content delegate:self];
+        
+        FBSDKMessageDialog *messageDialog = [[FBSDKMessageDialog alloc] init];
+        messageDialog.delegate = self;
+        [messageDialog setShareContent:content];
+
+        if ([messageDialog canShow])
+        {
+            [messageDialog show];
+            return;
+        }
+
+        // Messenger isn't installed. Redirect the person to the App Store.
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://itunes.apple.com/en/app/facebook-messenger/id454638411?mt=8"]];
         return;
 
     } else if ([method isEqualToString:@"share"] || [method isEqualToString:@"feed"]) {
@@ -309,41 +321,41 @@
         [dialog show];
         return;
     }
-    else if ( [method isEqualToString:@"share_open_graph"] ) {
-        if(!params[@"action"] || !params[@"object"]) {
-            NSLog(@"No action or object defined");
-            return;
-        }
+    // else if ( [method isEqualToString:@"share_open_graph"] ) {
+    //     if(!params[@"action"] || !params[@"object"]) {
+    //         NSLog(@"No action or object defined");
+    //         return;
+    //     }
 
-        //Get object JSON
-        NSError *jsonError;
-        NSData *objectData = [params[@"object"] dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
-                                                             options:NSJSONReadingMutableContainers
-                                                               error:&jsonError];
+    //     //Get object JSON
+    //     NSError *jsonError;
+    //     NSData *objectData = [params[@"object"] dataUsingEncoding:NSUTF8StringEncoding];
+    //     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:objectData
+    //                                                          options:NSJSONReadingMutableContainers
+    //                                                            error:&jsonError];
 
-        if(jsonError) {
-            NSLog(@"There was an error parsing your 'object' JSON string");
-        } else {
-            FBSDKShareOpenGraphObject *object = [FBSDKShareOpenGraphObject objectWithProperties:json];
-            if(!json[@"og:type"]) {
-                NSLog(@"No 'og:type' encountered in the object JSON. Please provide an Open Graph object type.");
-                return;
-            }
-            NSString *objectType = json[@"og:type"];
-            objectType = [objectType stringByReplacingOccurrencesOfString:@"."
-                                                               withString:@":"];
-            FBSDKShareOpenGraphAction *action = [FBSDKShareOpenGraphAction actionWithType:params[@"action"] object:object key:objectType];
+    //     if(jsonError) {
+    //         NSLog(@"There was an error parsing your 'object' JSON string");
+    //     } else {
+    //         FBSDKShareOpenGraphObject *object = [FBSDKShareOpenGraphObject objectWithProperties:json];
+    //         if(!json[@"og:type"]) {
+    //             NSLog(@"No 'og:type' encountered in the object JSON. Please provide an Open Graph object type.");
+    //             return;
+    //         }
+    //         NSString *objectType = json[@"og:type"];
+    //         objectType = [objectType stringByReplacingOccurrencesOfString:@"."
+    //                                                            withString:@":"];
+    //         FBSDKShareOpenGraphAction *action = [FBSDKShareOpenGraphAction actionWithType:params[@"action"] object:object key:objectType];
 
-            FBSDKShareOpenGraphContent *content = [[FBSDKShareOpenGraphContent alloc] init];
-            content.action = action;
-            content.previewPropertyName = objectType;
-            [FBSDKShareDialog showFromViewController:self.topMostController
-                                         withContent:content
-                                            delegate:nil];
-        }
-        return;
-    }
+    //         FBSDKShareOpenGraphContent *content = [[FBSDKShareOpenGraphContent alloc] init];
+    //         content.action = action;
+    //         content.previewPropertyName = objectType;
+    //         [FBSDKShareDialog showFromViewController:self.topMostController
+    //                                      withContent:content
+    //                                         delegate:nil];
+    //     }
+    //     return;
+    // }
     else if ([method isEqualToString:@"apprequests"]) {
         FBSDKGameRequestDialog *dialog = [[FBSDKGameRequestDialog alloc] init];
         dialog.delegate = self;
