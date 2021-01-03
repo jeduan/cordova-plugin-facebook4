@@ -92,9 +92,6 @@ public class ConnectPlugin extends CordovaPlugin {
         // augment web view to enable hybrid app events
         enableHybridAppEvents();
 
-        // Set up the activity result callback to this class
-        cordova.setActivityResultCallback(this);
-
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(final LoginResult loginResult) {
